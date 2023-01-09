@@ -37,6 +37,9 @@ sql
 public
 mariadb-data
 
+# Environment
+.env
+
 # Optional npm cache directory
 .npm
 
