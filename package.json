@@ -1,0 +1,27 @@
+{
+  "name": "measurement",
+  "version": "1.0.0",
+  "description": "Node.js on Docker",
+  "author": "First Last <first.last@example.com>",
+  "main": "server.js",
+  "scripts": {
+    "start": "nodemon server.js",
+    "dev": "concurrently \"json-server --watch mock-db.json --middlewares middleware-mock.js --routes mock-routes.json --port 9000\" \"npm run --prefix web dev\"",
+    "build": "cd ./public & gulp.js"
+  },
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "dotenv": "^16.0.3",
+    "express": "^4.16.1",
+    "fs": "^0.0.1-security",
+    "https": "^1.0.0",
+    "mariadb": "^3.0.2",
+    "nodemon": "^2.0.20",
+    "passport": "^0.6.0",
+    "passport-http": "^0.3.0"
+  },
+  "devDependencies": {
+    "concurrently": "^7.5.0",
+    "json-server": "^0.17.0"
+  }
+}

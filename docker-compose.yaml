@@ -1,0 +1,43 @@
+###
+## for local dev, wait for db to pass healthcheck before we start node
+## also, build custom dockerfile to the dev stage
+###
+
+# version key is DEPRECATED
+# v2 and v3 features now combined in compose CLI
+
+services:
+  node:
+    build:
+      dockerfile: Dockerfile
+      context: .
+      # build to the stage named dev
+      target: dev
+    volumes:
+      - .:/app
+    ports:
+      # use docker compose ps to see which host port is used
+      - "3000"
+
+  db:
+    image: mariadb:10.10.2
+    restart: unless-stopped
+    ports:
+      - "3306:3306"
+    environment:
+      MARIADB_ROOT_PASSWORD: "${MARIADB_ROOT_PASSWORD}"
+      MARIADB_USER: "${MARIADB_USER}"
+      MARIADB_PASSWPRD: "${MARIADB_PASSWORD}"
+      MARIADB_DATABASE : "CRO"
+    volumes:
+      - ./mariadb-data:/var/lib/mysql
+      - ./sql:/docker-entrypoint-initdb.d
+      
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080
+
+volumes:
+  mariadb-data:
