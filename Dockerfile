@@ -26,6 +26,7 @@ CMD ["nodemon", "./bin/www", "--inspect=0.0.0.0:9229"]
 
 FROM base as source
 COPY --chown=node:node . .
+COPY --chown=node:node .env .env
 RUN cd /app/web \
     && npm install --include=dev \
     && npm run build
