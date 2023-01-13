@@ -67,6 +67,7 @@ class PatientModal extends LitElement {
 
     changeValueId(){
         return ({target}) => {
+            console.log(target);
             this.newPatient.id = target.value.length > 20 ? target.value.substring(0,20) : target.value;
             console.log(this.newPatient.id);
         }
