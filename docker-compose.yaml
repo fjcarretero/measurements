@@ -17,7 +17,7 @@ services:
       - .:/app
     ports:
       # use docker compose ps to see which host port is used
-      - "3000"
+      - "8443:8443"
 
   db:
     image: mariadb:10.10.2
