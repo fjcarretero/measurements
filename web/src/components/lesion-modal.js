@@ -61,6 +61,16 @@ class LesionModal extends LitElement {
     //     }
     // }
 
+    changeValueVerbatim(){
+        return ({target}) => {
+            if (target.value.length > 20) {
+                target.value = target.value.substring(0,20);
+            }    
+            this.newLesion.verbatim = target.value;
+            return target
+        }
+    }
+
     changeValue(type){
         return ({target}) => {
             this.newLesion[type] = target.value;
@@ -171,7 +181,7 @@ class LesionModal extends LitElement {
                     <kor-menu-item label="SPLEEN"></kor-menu-item>
                     <kor-menu-item label="STOMACH"></kor-menu-item>
                 </kor-input>
-                <kor-input tabindex="2" @value-changed=${this.changeValue("verbatim")} label="Verbatim" autofocus="true" type="Text" .status=${this._verbatimStatus}></kor-input>
+                <kor-input tabindex="2" @value-changed=${this.changeValueVerbatim()} label="Verbatim" autofocus="true" .status=${this._verbatimStatus}></kor-input>
                 <kor-card style="flex-wrap;" flat flex-direction="row">
                     <kor-text style="flex: 4 1;">Lymph Node</kor-text>
                     <kor-switch style="flex: 1 1;">

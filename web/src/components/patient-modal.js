@@ -65,9 +65,15 @@ class PatientModal extends LitElement {
     //     this._iRecist = false;
     // }
 
-    changeValue(type){
+    changeValueId(){
         return ({target}) => {
-            this.newPatient[type] = target.value;
+            this.newPatient[type] = target.value.length > 20 ? target.value.substring(0,20) : target.value;
+        }
+    }
+
+    changeValueResearch(){
+        return ({target}) => {   
+            this.newPatient.research = this.researchs.filter(research => research.name==target.value)[0].id;
         }
     }
 
@@ -145,10 +151,10 @@ class PatientModal extends LitElement {
         console.log(this._patientIdStatus);
         return html`
             <kor-modal id="addLesion" visible sticky label="Add Patient" height="1000">
-                <kor-input tabindex="1" @value-changed=${this.changeValue("id")} label="PatientId" autofocus="true" type="text" .status=${this._patientIdStatus}></kor-input>
-                <kor-input tabindex="2" @value-changed=${this.changeValue("research")} label="Research" autofocus="true" type="select" .status=${this._researchStatus}>
+                <kor-input tabindex="1" @value-changed=${this.changeValueId()} label="PatientId" autofocus="true" type="text" .status=${this._patientIdStatus}></kor-input>
+                <kor-input tabindex="2" @value-changed=${this.changeValueResearch()} label="Research" autofocus="true" type="select" .status=${this._researchStatus}>
                     ${!this.researchs ? html`` : this.researchs.map(research => html`
-                        <kor-menu-item label=${research.id}></kor-menu-item>`
+                        <kor-menu-item label=${research.name}></kor-menu-item>`
                     )}
                 </kor-input>
                 <kor-card style="flex-wrap;" flat flex-direction="row">

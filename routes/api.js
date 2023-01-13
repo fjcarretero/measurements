@@ -35,6 +35,7 @@ exports.getResearches = async function (req, res, next) {
         for (i = 0, len = rows.length; i < len; i++) {
             researches.push({
                 id: rows[i].id_research,
+                name: rows[i].name
             })
         }
         res.json(researches);
@@ -106,7 +107,7 @@ exports.addPatient = async function (req, res, next) {
         json.nonTargetLesions.map(async lesion => 
             rows = await conn.query(`insert into CRO.LESIONS (id_patient, id_lesion, id_research, type, localization, verbatim, lymphNode, basal) values (?, ?, ?, ?, ?, ?, ?, ?)`, [json.id, lesion.id, json.research, 'NTL', lesion.localization, lesion.verbatim, lesion.lymphNode, lesion.basal])
         );
-        console.log(json);
+        //console.log(json);
 
         res.status(201).json(json);
     } catch (err) {
@@ -123,12 +124,12 @@ exports.getMeasurementsByPatientId = async function (req, res, next) {
   try {
         var measurements = [];
         conn = await db.pool.getConnection();
-        const rows = await conn.query(`select id_measurement, id_patient, DATE_FORMAT(date, '%d-%m-%Y') as date, new_lesions from CRO.MEASUREMENTS where id_patient = ? ORDER By date`, [id] );
+        const rows = await conn.query(`select id_measurement, id_patient, DATE_FORMAT(date, '%d-%m-%Y') as date_formatted, new_lesions from CRO.MEASUREMENTS where id_patient = ? ORDER By date`, [id] );
         for (i = 0, len = rows.length; i < len; i++) {
             var measurement = {
               id: rows[i].id_measurement,
               patientId: rows[i].id_patient,
-              date: rows[i].date,
+              date: rows[i].date_formatted,
               data: {
                 newLesions: rows[i].new_lesions
               }
@@ -178,7 +179,7 @@ exports.addMeasurementsByPatientId = async function (req, res, next) {
           conn.query(`insert into CRO.LESIONS_MEASUREMENTS (id_measurement, id_lesion, value) values (?, ?, ?)`, [seq, key, json.data[key]])
         }
       });
-      json.id = seq;    
+      json.id = seq.toString();    
           
         //const sum = await db.pool.query(`select sum(basal) as sumBasal from CRO.LESIONS where id_patient = ?`, [id])
         const lesionRows = await conn.query(`select * from CRO.LESIONS where id_patient = ? and type = 'TL'`,[id]);
@@ -194,7 +195,9 @@ exports.addMeasurementsByPatientId = async function (req, res, next) {
             basal: lesionRows[j].basal,
           });
         }
-        res.json(calculus.includeCalculus(json, patient));
+        let re = calculus.includeCalculus(json, patient);
+        //console.log(re);
+        res.json(re);
       } catch (err) {
         next(err);
     } finally {

@@ -1,16 +1,18 @@
 {
   "researchs": [
     {
-      "id": "research1"
+      "id": 1,
+      "name": "research1"
     },
     {
-      "id": "research2"
+      "id": 2,
+      "name": "research2"
     }
   ],
   "patients": [
     {
       "id": "123123",
-      "research": "research1",
+      "research": 1,
       "targetLesions": [
         {
           "id": "tl1",
