@@ -137,7 +137,7 @@ class PatientModal extends LitElement {
                 bubbles: true,
                 composed: true,
             }));
-            this.dispatchClosePatient();
+            //this.dispatchClosePatient();
         }
     }
 

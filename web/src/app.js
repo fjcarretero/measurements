@@ -45,6 +45,7 @@ class App extends LitElement {
             nonTargetLesions: []
         }
         this.createView = true;
+        this.openModal = false;
     }
 
     patientSelectedListener({detail}) {
@@ -54,6 +55,7 @@ class App extends LitElement {
     patientCreatedListener({detail}) {
         this.patient = detail;
         this.createView = false;
+        this.openModal = false;
     }
 
     backListener() {

@@ -171,7 +171,7 @@ class LesionModal extends LitElement {
                 bubbles: true,
                 composed: true,
             }));
-            this.dispatchCloseLesion();
+            this.dispatchContinueAlert();
         }
     }
 
