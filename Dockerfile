@@ -17,7 +17,7 @@ WORKDIR /app
 USER node
 COPY --chown=node:node package*.json yarn*.lock ./
 RUN npm ci --only=production && npm cache clean --force
-RUN cd web \
+RUN cd /app/web \
     npm install --include=dev \
     npm run build
 
