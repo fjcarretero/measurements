@@ -13,8 +13,6 @@ services:
       context: .
       # build to the stage named dev
       target: prod
-    volumes:
-      - .:/app
     ports:
       # use docker compose ps to see which host port is used
       - "8443:8443"
