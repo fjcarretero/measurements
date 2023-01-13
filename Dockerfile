@@ -18,8 +18,8 @@ USER node
 COPY --chown=node:node package*.json yarn*.lock ./
 RUN npm ci --only=production && npm cache clean --force
 RUN cd /app/web \
-    npm install --include=dev \
-    npm run build
+    && npm install --include=dev \
+    && npm run build
 
 FROM base as dev
 ENV NODE_ENV=development
