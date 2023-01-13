@@ -10,6 +10,7 @@ RUN apt-get update \
     && apt-get install -y --no-install-recommends \
     tini \
     && rm -rf /var/lib/apt/lists/*
+RUN chmod +x /usr/bin/tini
 EXPOSE 3000
 RUN mkdir /app && chown -R node:node /app
 WORKDIR /app
@@ -56,5 +57,5 @@ RUN case ${TARGETPLATFORM} in \
 RUN trivy fs --severity "HIGH,CRITICAL" --no-progress --security-checks vuln .
 
 FROM source as prod
-ENTRYPOINT ["/usr/local/bin/tini", "--"]
+ENTRYPOINT ["/usr/bin/tini", "--"]
 CMD ["node", "./bin/www"]
