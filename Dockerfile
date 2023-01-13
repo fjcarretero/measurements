@@ -17,9 +17,6 @@ WORKDIR /app
 USER node
 COPY --chown=node:node package*.json yarn*.lock ./
 RUN npm ci --only=production && npm cache clean --force
-RUN cd /app/web \
-    && npm install --include=dev \
-    && npm run build
 
 FROM base as dev
 ENV NODE_ENV=development
@@ -29,6 +26,9 @@ CMD ["nodemon", "./bin/www", "--inspect=0.0.0.0:9229"]
 
 FROM base as source
 COPY --chown=node:node . .
+RUN cd /app/web \
+    && npm install --include=dev \
+    && npm run build
 
 FROM source as test
 ENV NODE_ENV=development
