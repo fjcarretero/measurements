@@ -8,7 +8,8 @@ class PatientCreate extends LitElement {
         patient: {},
         targetLesionIndex: {state: true},
         nonTargetLesionIndex:{state: true},
-        targetLesionsStatus: {state: true}
+        targetLesionsStatus: {state: true},
+        _showAlert: {type: Boolean, state: true}
     };
     
     constructor() {
@@ -20,6 +21,7 @@ class PatientCreate extends LitElement {
             targetLesions: [],
             nonTargetLesions: []
         };
+        this._showAlert = false;
         this.addEventListener('target-lesion-added', this.addTargetLesion);
         this.addEventListener('non-target-lesion-added', this.addNonTargetLesion);
     };
@@ -30,6 +32,7 @@ class PatientCreate extends LitElement {
         this.patient = {};
         this.nonTargetLesionIndex = 1
         this.targetLesionsStatus = 1
+        this._showAlert = false;
     }
 
     changeResearchIdValue({detail}) {
@@ -86,6 +89,23 @@ class PatientCreate extends LitElement {
         
     }
 
+    dispatchBack(){
+        this._showAlert = true;
+    }
+
+    dispatchCancelAlert() {
+        this._showAlert = false;
+    }
+
+    dispatchContinueAlert () {
+        this.dispatchEvent(new CustomEvent('patient-cancelled', {
+            detail: '',
+            bubbles: true,
+            composed: true,
+        }));
+        this._showAlert = false;
+    }
+
     render(){
         return html`
             <kor-card flat>
@@ -104,6 +124,9 @@ class PatientCreate extends LitElement {
                 <kor-button slot="footer" label="Create" @click=${() => this.createPatient()}></kor-button>
                 <kor-button slot="footer" label="< Back" @click=${() => this.dispatchBack()}></kor-button>
             </kor-card>
+            ${!this._showAlert ? html `` : html `
+                <app-alert-modal @alert-cancelled=${() => this.dispatchCancelAlert()} @alert-continued=${() => this.dispatchContinueAlert()} ></app-alert-modal>
+            `}
         `;
     };
 

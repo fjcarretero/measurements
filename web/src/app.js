@@ -58,6 +58,11 @@ class App extends LitElement {
         this.openModal = false;
     }
 
+    patientCancelledListener(){
+        this.createView = false;
+        this.openModal = false; 
+    }
+
     backListener() {
         this.patient = null;
     }
@@ -71,7 +76,7 @@ class App extends LitElement {
                 ${ !this.createView ? html `
                         ${this.renderPatient()}
                     ` : html `
-                        <app-patient-create @patient-created=${this.patientCreatedListener} .patient=${this.newPatient} style="max-width: 1024px; width: 100%; margin: 0 auto;"></app-patient-create>` 
+                        <app-patient-create @patient-created=${this.patientCreatedListener} @patient-cancelled=${this.patientCancelledListener} .patient=${this.newPatient} style="max-width: 1024px; width: 100%; margin: 0 auto;"></app-patient-create>` 
                 }
                 ${ !this.openModal ? html `` : html`
                     <app-patient-modal .researchs=${this.researchs} @patient-added=${this.patientAddedListener} @patient-closed=${this.patientClosedListener}></app-patient-modal>
