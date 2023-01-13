@@ -1,5 +1,6 @@
 import '@kor-ui/kor';
 import {html, LitElement} from 'lit';
+import './alert-modal.js'
 
 class PatientModal extends LitElement {
     static properties = {
@@ -10,6 +11,7 @@ class PatientModal extends LitElement {
         _patientIdStatus: {state: true},
         _researchStatus: {state: true},
         _studyStatus: {state: true},
+        _showAlert: {type: Boolean, state: true}
         //openCloseVariable: {type: Boolean, reflect: true}
     };
     
@@ -21,6 +23,7 @@ class PatientModal extends LitElement {
         this._studyStatus = null;
         this._recist = true;
         this._iRecist = false;
+        this._showAlert = false;
         //this.openCloseVariable = false;
     };
 
@@ -32,7 +35,8 @@ class PatientModal extends LitElement {
         this._researchStatus = null;
         this._studyStatus = null;
         this._recist = true;
-        this._iRecist = false;        
+        this._iRecist = false;     
+        this._showAlert = false;   
     }
 
     // update(changedProperties) {
@@ -67,10 +71,10 @@ class PatientModal extends LitElement {
 
     changeValueId(type){
         return ({target}) => {
-            console.log(target);
+            //console.log(target);
             this.newPatient.id = target.value.length > 20 ? target.value.substring(0,20) : target.value;
-            console.log(this.newPatient.id);
-            return target
+            //console.log(this.newPatient.id);
+            return target;
         }
     }
 
@@ -138,16 +142,20 @@ class PatientModal extends LitElement {
     }
 
     dispatchClosePatient () {
+        this._showAlert = true;
+    }
+
+    dispatchCancelAlert () {
+        this._showAlert = false;
+    }
+
+    dispatchContinueAlert () {
         this.dispatchEvent(new CustomEvent('patient-closed', {
             detail: '',
             bubbles: true,
             composed: true,
         }));
-        // this._patientIdStatus = null;
-        // this._researchStatus = null;
-        // this._studyStatus = null;
-        // this._recist = true;
-        // this._iRecist = false;
+        this._showAlert = false;
     }
 
     render() {
@@ -171,6 +179,9 @@ class PatientModal extends LitElement {
                 <kor-button slot="footer" color="secondary" label="Close" @click=${() => this.dispatchClosePatient()}></kor-button>
                 <kor-button slot="footer" color="primary" label="Create" @click=${() => this.dispatchSavePatient()}></kor-button>
             </kor-modal>
+            ${!this._showAlert ? html `` : html `
+                <app-alert-modal @alert-cancelled=${() => this.dispatchCancelAlert()} @alert-continued=${() => this.dispatchContinueAlert()} ></app-alert-modal>
+            `}
         `;
     }
 }

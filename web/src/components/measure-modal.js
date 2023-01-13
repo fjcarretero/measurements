@@ -1,5 +1,6 @@
 import '@kor-ui/kor';
 import {html, LitElement} from 'lit';
+import './alert-modal.js';
 
 class MeasureModal extends LitElement {
     static properties = {
@@ -11,6 +12,7 @@ class MeasureModal extends LitElement {
         _targetLesionsStatus: {state: true},
         _nonTargetLesionsStatus: {state: true},
         _newLesionsStatus: {state: true},
+        _showAlert: {type: Boolean, state: true}
         //openCloseVariable: {type: Boolean, reflect: true}
     };
     
@@ -20,6 +22,7 @@ class MeasureModal extends LitElement {
         this._targetLesionsBackup = {};
         this._targetLesionsStatus = {};
         this._nonTargetLesionsStatus = {};
+        this._showAlert = false;
         //this.openCloseVariable = false;
     };
 
@@ -68,6 +71,7 @@ class MeasureModal extends LitElement {
         this._nonTargetLesionsStatus = {};
         this._dateStatus = null;
         this._newLesionsStatus = null;
+        this._showAlert = false;
     }
 
     changeValue(type, lesion){
@@ -180,18 +184,27 @@ class MeasureModal extends LitElement {
                 bubbles: true,
                 composed: true,
             }));
-            this.openCloseVariable = false;
+            //this.openCloseVariable = false;
         }
     }
 
     dispatchCloseMeasure () {
-        console.log("dispatchCloseMeasure");
+        this._showAlert = true;
+    }
+
+    dispatchCancelAlert () {
+        this._showAlert = false;
+    }
+
+    dispatchContinueAlert () {
+        //console.log("dispatchCloseMeasure");
         this.dispatchEvent(new CustomEvent('measureClosed', {
             detail: '',
             bubbles: true,
             composed: true,
         }));
-        this.openCloseVariable = false;
+        this._showAlert = false;
+        //this.openCloseVariable = false;
     }
 
     render() {
@@ -218,6 +231,9 @@ class MeasureModal extends LitElement {
                 <kor-button slot="footer" color="secondary" label="Close" @click=${() => this.dispatchCloseMeasure()}></kor-button>
                 <kor-button slot="footer" color="primary" label="Add" @click=${() => this.dispatchSaveMeasure()}></kor-button>
             </kor-modal>
+            ${!this._showAlert ? html `` : html `
+                <app-alert-modal @alert-cancelled=${() => this.dispatchCancelAlert()} @alert-continued=${() => this.dispatchContinueAlert()} ></app-alert-modal>
+            `}
         `;
     }
 

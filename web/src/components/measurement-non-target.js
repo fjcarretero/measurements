@@ -82,7 +82,9 @@ class MeasurementNonTarget extends LitElement {
     }
 
     renderResponse() {
-        return html`
+        console.log("rows");
+        console.log(this.rows.length);
+        return this.rows.length == 0 ? html `` : html`
             <kor-table-row>
                 ${this.renderVariables(this.measurement, "response")}
             </kor-table-row>

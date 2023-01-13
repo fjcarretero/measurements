@@ -28,7 +28,7 @@ class NonTargetLesions extends LitElement {
     render(){
         return !this.lesions ? html``: html`
             <app-lesions-table .label=${"Non Target Lesions"} .rows=${this.lesions} ?create=${this.create} prefix="non-target">
-                ${!this.create ? html`
+                ${!this.create && this.lesions.length > 0 ? html`
                 <kor-table columns="1fr 2fr 1fr 2fr 1fr">
                     <kor-table-row style="grid-template-columns: 1fr 2fr 1fr 2fr 1fr;">
                         <kor-table-cell head grid-cols="5">Response</kor-table-cell>

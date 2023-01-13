@@ -1,5 +1,6 @@
 import '@kor-ui/kor';
 import {html, LitElement} from 'lit';
+import './alert-modal.js';
 
 class LesionModal extends LitElement {
     static properties = {
@@ -9,6 +10,7 @@ class LesionModal extends LitElement {
         _verbatimStatus: {state: true},
         _lymphNodeStatus: {state: true},
         _basalStatus: {state: true},
+        _showAlert: {type: Boolean, state: true}
         //openCloseVariable: {type: Boolean, reflect: true}
     };
     
@@ -19,6 +21,7 @@ class LesionModal extends LitElement {
         this._verbatimStatus = null;
         this._lymphNodeStatus = null;
         this._basalStatus = null;
+        this._showAlert = false;
         //this.openCloseVariable = false;
     };
 
@@ -51,6 +54,7 @@ class LesionModal extends LitElement {
         this._verbatimStatus = null;
         this._lymphNodeStatus = null;
         this._basalStatus = null;
+        this._showAlert = false;
     }
 
     // update(changedProperties) {
@@ -67,13 +71,26 @@ class LesionModal extends LitElement {
                 target.value = target.value.substring(0,20);
             }    
             this.newLesion.verbatim = target.value;
-            return target
+            return target;
+        }
+    }
+
+    changeValueLocation(){
+        return ({target}) => {
+            this.newLesion.localization = target.value;
+            if (this.newLesion.localization == "LYMPH NODES") {
+                this.newLesion.lymphNode = "YES";
+            } else {
+                this.newLesion.lymphNode = "NO";
+            }
+            return target;
         }
     }
 
     changeValue(type){
         return ({target}) => {
             this.newLesion[type] = target.value;
+            return target;
         }
     }
 
@@ -159,18 +176,27 @@ class LesionModal extends LitElement {
     }
 
     dispatchCloseLesion () {
+        this._showAlert = true;
+    }
+
+    dispatchCancelAlert () {
+        this._showAlert = false;
+    }
+
+    dispatchContinueAlert () {
         this.dispatchEvent(new CustomEvent('lesion-closed', {
             detail: '',
             bubbles: true,
             composed: true,
         }));
+        this._showAlert = false;
     }
 
     render() {
         //this.initVariables()
         return html`
             <kor-modal id="addLesion" visible sticky label="Add Lesion" height="1000">
-                <kor-input tabindex="1" @value-changed=${this.changeValue("localization")} label="Localization" autofocus="true" type="select" .status=${this._localizationStatus}>
+                <kor-input tabindex="1" @value-changed=${this.changeValueLocation()} label="Localization" autofocus="true" type="select" .status=${this._localizationStatus}>
                     <kor-menu-item label="NA"></kor-menu-item>
                     <kor-menu-item label="BRAIN"></kor-menu-item>
                     <kor-menu-item label="BREAST"></kor-menu-item>
@@ -182,6 +208,7 @@ class LesionModal extends LitElement {
                     <kor-menu-item label="STOMACH"></kor-menu-item>
                 </kor-input>
                 <kor-input tabindex="2" @value-changed=${this.changeValueVerbatim()} label="Verbatim" autofocus="true" .status=${this._verbatimStatus}></kor-input>
+                <!--
                 <kor-card style="flex-wrap;" flat flex-direction="row">
                     <kor-text style="flex: 4 1;">Lymph Node</kor-text>
                     <kor-switch style="flex: 1 1;">
@@ -192,6 +219,7 @@ class LesionModal extends LitElement {
                         <kor-badge .status=${this._lymphNodeStatus}></kor-badge>` 
                     : ''}
                 </kor-card>
+                -->
                 ${this.prefix == "target" ? html`
                     <kor-input tabindex="4" @value-changed=${this.changeValue("basal")} label="Basal" autofocus="true" type="Number" .status=${this._basalStatus}></kor-input>` :
                 html`
@@ -206,6 +234,9 @@ class LesionModal extends LitElement {
                 <kor-button slot="footer" color="secondary" label="Close" @click=${() => this.dispatchCloseLesion()}></kor-button>
                 <kor-button slot="footer" color="primary" label="Add" @click=${() => this.dispatchSaveLesion()}></kor-button>
             </kor-modal>
+            ${!this._showAlert ? html `` : html `
+                <app-alert-modal @alert-cancelled=${() => this.dispatchCancelAlert()} @alert-continued=${() => this.dispatchContinueAlert()} ></app-alert-modal>
+            `}
         `;
     }
 }
