@@ -16,7 +16,10 @@ RUN mkdir /app && chown -R node:node /app
 WORKDIR /app
 USER node
 COPY --chown=node:node package*.json yarn*.lock ./
-RUN DEBUG=* npm ci --only=production && npm cache clean --force
+RUN npm ci --only=production && npm cache clean --force
+RUN cd web \
+    npm install --include=dev \
+    npm run build
 
 FROM base as dev
 ENV NODE_ENV=development

@@ -12,7 +12,7 @@ services:
       dockerfile: Dockerfile
       context: .
       # build to the stage named dev
-      target: dev
+      target: prod
     volumes:
       - .:/app
     ports:
