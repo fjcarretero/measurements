@@ -4,7 +4,7 @@ import {html, LitElement} from 'lit';
 class PatientModal extends LitElement {
     static properties = {
         researchs: {type: Array},
-        newPatient: {},
+        newPatient: {type: Object},
         _recist: {state: true},
         _iRecist: {state: true},
         _patientIdStatus: {state: true},
