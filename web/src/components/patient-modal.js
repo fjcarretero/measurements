@@ -11,6 +11,7 @@ class PatientModal extends LitElement {
         _patientIdStatus: {state: true},
         _researchStatus: {state: true},
         _studyStatus: {state: true},
+        _dateStatus: {state: true},
         _showAlert: {type: Boolean, state: true}
         //openCloseVariable: {type: Boolean, reflect: true}
     };
@@ -21,6 +22,7 @@ class PatientModal extends LitElement {
         this._patientIdStatus = null;
         this._researchStatus = null;
         this._studyStatus = null;
+        this._dateStatus = null;
         this._recist = true;
         this._iRecist = false;
         this._showAlert = false;
@@ -34,6 +36,7 @@ class PatientModal extends LitElement {
         this._patientIdStatus = null;
         this._researchStatus = null;
         this._studyStatus = null;
+        this._dateStatus = null;
         this._recist = true;
         this._iRecist = false;     
         this._showAlert = false;   
@@ -69,7 +72,7 @@ class PatientModal extends LitElement {
     //     this._iRecist = false;
     // }
 
-    changeValueId(type){
+    changeValueId(){
         return ({target}) => {
             //console.log(target);
             this.newPatient.id = target.value.length > 20 ? target.value.substring(0,20) : target.value;
@@ -85,6 +88,13 @@ class PatientModal extends LitElement {
         }
     }
 
+    changeValueDate(){
+        return ({target}) => {
+            this.newPatient.date = target.value;
+            return target;
+        }
+    }
+
     toggleRecist() {
         this._recist = this._recist;
     }
@@ -96,6 +106,7 @@ class PatientModal extends LitElement {
     validateForm() {
         let output = this.validatePatientId();
         output = this.validateResearch() && output;
+        output = this.validateDate() && output;
         //return this.validateStudy() && output;
         return output;
     };
@@ -116,6 +127,16 @@ class PatientModal extends LitElement {
             return false;
         } else {
             this._researchStatus = "success";
+            return true;
+        }
+    }
+
+    validateDate() {
+        if (!this.newPatient.date) { 
+            this._dateStatus =  "error";
+            return false;
+        } else {
+            this._dateStatus = "success";
             return true;
         }
     }
@@ -163,12 +184,13 @@ class PatientModal extends LitElement {
         console.log(this._patientIdStatus);
         return html`
             <kor-modal id="addLesion" visible sticky label="Add Patient" height="1000">
-                <kor-input tabindex="1" @value-changed=${this.changeValueId("id")} label="PatientId" autofocus="true" type="text" .status=${this._patientIdStatus}></kor-input>
+                <kor-input tabindex="1" @value-changed=${this.changeValueId()} label="PatientId" autofocus="true" type="text" .status=${this._patientIdStatus}></kor-input>
                 <kor-input tabindex="2" @value-changed=${this.changeValueResearch()} label="Research" autofocus="true" type="select" .status=${this._researchStatus}>
                     ${!this.researchs ? html`` : this.researchs.map(research => html`
                         <kor-menu-item label=${research.name}></kor-menu-item>`
                     )}
                 </kor-input>
+                <kor-input tabindex="3" @value-changed=${this.changeValueDate()} label="date" autofocus="true" type="date" .status=${this._dateStatus}></kor-input>
                 <kor-card style="flex-wrap;" flat flex-direction="row">
                 <kor-tool toggle active @active-changed=${() => this.toggleRecist()} label="Recist"></kor-tool>
                 <kor-tool toggle @active-changed=${() => this.toggleIRecist()} label="iRecist"></kor-tool>

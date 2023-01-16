@@ -10,7 +10,8 @@ class LesionsTable extends LitElement {
         rows: {},
         prefix: {},
         addLesionModal: {type: Boolean},
-        create: {type: Boolean}
+        create: {type: Boolean},
+        date: {}
     };
 
     static styles = css`
@@ -35,13 +36,13 @@ class LesionsTable extends LitElement {
                 ${!this.status ? html`` : html`
                     <kor-badge slot="functions" status=${this.status}></kor-badge>
                 `}
-                <kor-table condensed flex-direction="row" columns="1fr 2fr 1fr 2fr 1fr">
+                <kor-table condensed flex-direction="row" columns="1fr 2fr 1fr 1fr 2fr">
                     <kor-table-row slot="header">
                         <kor-table-cell head grid-cols="1">ID</kor-table-cell>
                         <kor-table-cell head grid-cols="1">Localization</kor-table-cell>
                         <kor-table-cell head grid-cols="1">Verbatim</kor-table-cell>
-                        <kor-table-cell head grid-cols="1">Lymph Node</kor-table-cell>
-                        <kor-table-cell head grid-cols="1">Basal</kor-table-cell>
+                        <kor-table-cell head grid-cols="1">Lymph</br>Node</kor-table-cell>
+                        <kor-table-cell head grid-cols="1" alignment="right">Basal</br>${this.date}</kor-table-cell>
                     </kor-table-row>
                     ${this.renderRows(this.rows)}
                     <slot></slot>
@@ -65,7 +66,7 @@ class LesionsTable extends LitElement {
                 <kor-table-cell grid-cols="1">${rows[key].localization}</kor-table-cell>
                 <kor-table-cell grid-cols="1">${rows[key].verbatim}</kor-table-cell>
                 <kor-table-cell grid-cols="1">${rows[key].lymphNode}</kor-table-cell>
-                <kor-table-cell grid-cols="1">${rows[key].basal}</kor-table-cell>
+                <kor-table-cell grid-cols="1" alignment="right">${rows[key].basal}</kor-table-cell>
             </kor-table-row>
         `);
     };

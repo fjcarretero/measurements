@@ -5,7 +5,7 @@
   "author": "First Last <first.last@example.com>",
   "main": "server.js",
   "scripts": {
-    "start": "nodemon server.js",
+    "start": "nodemon bin/www",
     "dev": "concurrently \"json-server --watch mock-db.json --middlewares middleware-mock.js --routes mock-routes.json --port 9000\" \"npm run --prefix web dev\"",
     "build": "cd ./public & gulp.js"
   },

@@ -29,7 +29,6 @@ class App extends LitElement {
     }
 
     async openModalView() {
-        console.log("open");
         if(!this.researchs)
             this.researchs = await this.patientsDataProvider.getResearchs();
         this.openModal = true;

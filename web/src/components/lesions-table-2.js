@@ -77,7 +77,7 @@ class LesionsTable extends LitElement {
                         <kor-table-cell head grid-cols="1" alignment="center">ID</kor-table-cell>
                         <kor-table-cell head grid-cols="1" alignment="center" style="width: 100%">Localization</kor-table-cell>
                         <kor-table-cell head grid-cols="1" alignment="center">Verbatim</kor-table-cell>
-                        <kor-table-cell head grid-cols="1" alignment="center" style="width: 100%">Lymph Node</kor-table-cell>
+                        <kor-table-cell head grid-cols="1" alignment="center" style="width: 100%">Lymph2\nNode</kor-table-cell>
                         <kor-table-cell head grid-cols="1" alignment="center" style="width: 100%">Basal</kor-table-cell>
                     </kor-table-row>
                     ${this.renderRows(this.rows)}

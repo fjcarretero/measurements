@@ -12,6 +12,7 @@
   "patients": [
     {
       "id": "123123",
+      "date": "2020-01-01",
       "research": 1,
       "targetLesions": [
         {
@@ -49,6 +50,7 @@
     {
       "id": "123124",
       "research": "research2",
+      "date": "2020-01-01",
       "targetLesions": [
         {
           "id": "tl1",
@@ -71,6 +73,7 @@
     {
       "id": "123125",
       "research": "research2",
+      "date": "2020-01-01",
       "targetLesions": [
         {
           "localization": "BRAIN",
@@ -99,6 +102,7 @@
     {
       "id": "123",
       "research": "research1",
+      "date": "2020-01-01",
       "targetLesions": [
         {
           "localization": "BRAIN",

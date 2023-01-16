@@ -4,7 +4,7 @@ const db = require('./db');
 exports.searchPatients = async function (req, res, next) {
     var id = req.query.id_like;
 
-    var query = !id ? `select * from CRO.PATIENTS where id_patient` : `select * from CRO.PATIENTS where id_patient like '${id}%'`
+    var query = !id ? `select id_patient, id_research, DATE_FORMAT(date, '%d-%m-%Y') as date_formatted from CRO.PATIENTS where id_patient` : `select id_patient, id_research, DATE_FORMAT(date, '%d-%m-%Y') as date_formatted from CRO.PATIENTS where id_patient like '${id}%'`
 
     let conn;
     try {
@@ -15,6 +15,7 @@ exports.searchPatients = async function (req, res, next) {
             patients.push({
                 id: rows[i].id_patient,
                 research: rows[i].id_research,
+                date: rows[i].date_formatted
             })
         }
         res.json(patients);
@@ -55,15 +56,16 @@ exports.getPatientById = async function (req, res, next) {
         var patient = {};
 
         conn = await db.pool.getConnection();
-        const rows = await conn.query(`select * from CRO.PATIENTS where id_patient = ?`,[id]);
+        const rows = await conn.query(`select id_patient, id_research, DATE_FORMAT(date, '%d-%m-%Y') as date_formatted from CRO.PATIENTS where id_patient = ?`,[id]);
         for (i = 0, len = rows.length; i < len; i++) {
             patient = {
                 id: rows[i].id_patient,
                 research: rows[i].id_research,
+                date: rows[i].date_formatted,
                 targetLesions: [],
                 nonTargetLesions: []
             };
-            const lesionRows = await db.pool.query(`select * from CRO.LESIONS where id_patient = ?`,[id]);
+            const lesionRows = await db.pool.query(`select id_lesion, localization, verbatim, lymphNode, basal, type from CRO.LESIONS where id_patient = ?`,[id]);
             for (j = 0, lesionsLen = lesionRows.length; j < lesionsLen; j++) {
               if (lesionRows[j].type == 'TL')
                 patient.targetLesions.push({
@@ -100,7 +102,7 @@ exports.addPatient = async function (req, res, next) {
     try {
         var json = req.body;
         conn = await db.pool.getConnection();
-        let rows = await conn.query(`insert into CRO.PATIENTS (id_patient, id_research) values (?, ?)`, [json.id, json.research]);
+        let rows = await conn.query(`insert into CRO.PATIENTS (id_patient, id_research, date) values (?, ?, ?)`, [json.id, json.research, json.date]);
         json.targetLesions.map(async lesion => 
             rows = await conn.query(`insert into CRO.LESIONS (id_patient, id_lesion, id_research, type, localization, verbatim, lymphNode, basal) values (?, ?, ?, ?, ?, ?, ?, ?)`, [json.id, lesion.id, json.research, 'TL', lesion.localization, lesion.verbatim, lesion.lymphNode, lesion.basal])
         );
@@ -134,7 +136,7 @@ exports.getMeasurementsByPatientId = async function (req, res, next) {
                 newLesions: rows[i].new_lesions
               }
             };
-            const lesionsRows = await conn.query(`select * from CRO.LESIONS_MEASUREMENTS where id_measurement = ?`, [rows[i].id_measurement]);
+            const lesionsRows = await conn.query(`select id_lesion, value from CRO.LESIONS_MEASUREMENTS where id_measurement = ?`, [rows[i].id_measurement]);
             for (j = 0, lesionsLen = lesionsRows.length; j < lesionsLen; j++) {
               measurement.data[lesionsRows[j].id_lesion] = lesionsRows[j].value;
             }
@@ -142,7 +144,7 @@ exports.getMeasurementsByPatientId = async function (req, res, next) {
         }
     
       //const sum = await db.pool.query(`select sum(basal) as sumBasal from CRO.LESIONS where id_patient = ?`, [id])
-      const lesionRows = await conn.query(`select * from CRO.LESIONS where id_patient = ? and type = 'TL'`,[id]);
+      const lesionRows = await conn.query(`select id_lesion, localization, verbatim, lymphNode, basal from CRO.LESIONS where id_patient = ? and type = 'TL'`,[id]);
       var patient = {
         targetLesions: []
       };
@@ -182,7 +184,7 @@ exports.addMeasurementsByPatientId = async function (req, res, next) {
       json.id = seq.toString();    
           
         //const sum = await db.pool.query(`select sum(basal) as sumBasal from CRO.LESIONS where id_patient = ?`, [id])
-        const lesionRows = await conn.query(`select * from CRO.LESIONS where id_patient = ? and type = 'TL'`,[id]);
+        const lesionRows = await conn.query(`select id_lesion, localization, verbatim, lymphNode, basal from CRO.LESIONS where id_patient = ? and type = 'TL'`,[id]);
         var patient = {
           targetLesions: []
         };

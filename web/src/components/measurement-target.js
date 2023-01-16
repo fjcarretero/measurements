@@ -65,7 +65,7 @@ class MeasurementTarget extends LitElement {
         return !this.measurement ? html`` : html`
                 <kor-table condensed flex-direction="row" columns="1fr">
                     <kor-table-row slot="header">
-                        <kor-table-cell head grid-cols="1" alignment="center">${this.measurement.date}</kor-table-cell>
+                        <kor-table-cell head grid-cols="1" alignment="center"></br>${this.measurement.date}</kor-table-cell>
                     </kor-table-row>
                     ${this.renderLesionMeasurement(this.rows)}
                     ${this.renderResponse()}

@@ -74,7 +74,7 @@ class LesionsTable extends LitElement {
                         <kor-table-cell head grid-cols="1">ID</kor-table-cell>
                         <kor-table-cell head grid-cols="1">Localization</kor-table-cell>
                         <kor-table-cell head grid-cols="1">Verbatim</kor-table-cell>
-                        <kor-table-cell head grid-cols="1">Lymph Node</kor-table-cell>
+                        <kor-table-cell head grid-cols="1">Lymph1\nNode</kor-table-cell>
                         <kor-table-cell head grid-cols="1">Basal</kor-table-cell>
                         ${this.renderMeasurementDates(this.measurements)}
                     </kor-table-row>

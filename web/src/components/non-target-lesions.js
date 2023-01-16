@@ -10,7 +10,8 @@ class NonTargetLesions extends LitElement {
         measurements: {},
         suffix: {},
         layout: {},
-        create: {type: Boolean}
+        create: {type: Boolean},
+        date: {}
     };
     
     constructor() {
@@ -27,7 +28,7 @@ class NonTargetLesions extends LitElement {
 
     render(){
         return !this.lesions ? html``: html`
-            <app-lesions-table .label=${"Non Target Lesions"} .rows=${this.lesions} ?create=${this.create} prefix="non-target">
+            <app-lesions-table .label=${"Non Target Lesions"} .rows=${this.lesions} ?create=${this.create} prefix="non-target" .date=${this.date}>
                 ${!this.create && this.lesions.length > 0 ? html`
                 <kor-table columns="1fr 2fr 1fr 2fr 1fr">
                     <kor-table-row style="grid-template-columns: 1fr 2fr 1fr 2fr 1fr;">

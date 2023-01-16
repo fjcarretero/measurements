@@ -12,7 +12,8 @@ class TargetLesions extends LitElement {
         sumDiametersBasal: {},
         layout: {state: true},
         expanded: {state: true},
-        create: {type: Boolean}
+        create: {type: Boolean},
+        date: {}
     };
     
     constructor() {
@@ -91,7 +92,7 @@ class TargetLesions extends LitElement {
 
     render(){
         return !this.lesions ? html``: html`
-            <app-lesions-table .label=${"Target Lesions"} .rows=${this.lesions} prefix="target" ?create=${this.create} .status=${this.status}>
+            <app-lesions-table .label=${"Target Lesions"} .rows=${this.lesions} prefix="target" ?create=${this.create} .status=${this.status} .date=${this.date}>
                 ${this.layout && !this.create ? html`
                 <kor-table columns="1fr 2fr 1fr 2fr 1fr">
                 <kor-table-row style="grid-template-columns: 1fr 2fr 1fr 2fr 1fr;">
