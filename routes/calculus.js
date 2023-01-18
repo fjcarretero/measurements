@@ -37,7 +37,7 @@ exports.includeCalculus = (bodyJSON, patientData) => {
 
         //console.log(bodyJSON);
 
-        bodyJSON.sort((a,b) => { return a.date > b.date ? -1 : 0}).map(measurement => {
+        bodyJSON.map(measurement => {
             measurement['calculus'] = {
                 data: {
                     targetLesions: {

@@ -75,6 +75,14 @@ class PatientCreate extends LitElement {
         }
     }
 
+    deleteData() {
+        this.patient = {
+            ...this.patient,
+            targetLesions: [],
+            nonTargetLesions: []
+        };
+    }
+
     async createPatient() {
         if(this.validateForm()){
             let result = await this.patientsDataProvider.postPatients(this.patient);
@@ -133,6 +141,7 @@ class PatientCreate extends LitElement {
                         <kor-icon icon="chevron_left"></kor-icon>
                     </kor-card> -->
                 </kor-card>
+                <kor-button slot="footer" color="secondary" label="Delete" @click=${() => this.deleteData()}></kor-button>
                 <kor-button slot="footer" label="Create" @click=${() => this.createPatient()}></kor-button>
                 <kor-button slot="footer" label="< Back" @click=${() => this.dispatchBack()}></kor-button>
             </kor-card>

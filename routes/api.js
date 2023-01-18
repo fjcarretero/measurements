@@ -126,7 +126,7 @@ exports.getMeasurementsByPatientId = async function (req, res, next) {
   try {
         var measurements = [];
         conn = await db.pool.getConnection();
-        const rows = await conn.query(`select id_measurement, id_patient, DATE_FORMAT(date, '%d-%m-%Y') as date_formatted, new_lesions from CRO.MEASUREMENTS where id_patient = ? ORDER By date`, [id] );
+        const rows = await conn.query(`select id_measurement, id_patient, DATE_FORMAT(date, '%d-%m-%Y') as date_formatted, new_lesions from CRO.MEASUREMENTS where id_patient = ? ORDER By date desc`, [id] );
         for (i = 0, len = rows.length; i < len; i++) {
             var measurement = {
               id: rows[i].id_measurement,
