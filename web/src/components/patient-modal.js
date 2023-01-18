@@ -83,6 +83,7 @@ class PatientModal extends LitElement {
 
     changeValueResearch(){
         return ({target}) => {   
+            this.newPatient.researchName = target.value;
             this.newPatient.research = this.researchs.filter(research => research.name==target.value)[0].id;
             return target
         }
@@ -180,8 +181,8 @@ class PatientModal extends LitElement {
     }
 
     render() {
-        console.log("render patient");
-        console.log(this._patientIdStatus);
+        //console.log("render patient");
+        //console.log(this._patientIdStatus);
         return html`
             <kor-modal id="addLesion" visible sticky label="Add Patient" height="1000">
                 <kor-input tabindex="1" @value-changed=${this.changeValueId()} label="PatientId" autofocus="true" type="text" .status=${this._patientIdStatus}></kor-input>

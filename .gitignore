@@ -33,9 +33,9 @@ jspm_packages
 
 # Security directory
 security
-sql
-public
-mariadb-data
+sql/password.sql
+public/*
+mariadb-data/*
 
 # Environment
 .env

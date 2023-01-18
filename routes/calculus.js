@@ -53,7 +53,7 @@ exports.includeCalculus = (bodyJSON, patientData) => {
                     response: overallResponse[measurement.date]
                 }
             }
-            console.log(measurement.calculus.data);
+            //console.log(measurement.calculus.data);
         })
         //console.log('--');
         //console.log(bodyJSON);

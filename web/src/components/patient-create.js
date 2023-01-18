@@ -6,6 +6,7 @@ class PatientCreate extends LitElement {
 
     static properties = {
         patient: {},
+        _patient: {state: true},
         targetLesionIndex: {state: true},
         nonTargetLesionIndex:{state: true},
         targetLesionsStatus: {state: true},
@@ -25,6 +26,17 @@ class PatientCreate extends LitElement {
         this.addEventListener('target-lesion-added', this.addTargetLesion);
         this.addEventListener('non-target-lesion-added', this.addNonTargetLesion);
     };
+
+    update(changed) {
+        super.update(changed);
+        console.log("changed");
+        console.log(changed);
+        if (changed.has('newPatient')) {
+            this._patient = {...this.patient,
+                "research": ""
+            }
+        }
+    }
 
     disconnectedCallback(){
         super.disconnectedCallback()
@@ -109,7 +121,7 @@ class PatientCreate extends LitElement {
     render(){
         return html`
             <kor-card flat>
-                <app-patient @researchId-changed=${this.changeResearchIdValue} @patientId-changed=${this.changePatientIdValue} .patient=${this.patient}></app-patient>
+                <app-patient @researchId-changed=${this.changeResearchIdValue} @patientId-changed=${this.changePatientIdValue} .patient=${this.patient} create></app-patient>
                 <kor-tabs>
                     <kor-tab-item label="RECIST" active></kor-tab-item>
                 </kor-tabs>
@@ -128,17 +140,6 @@ class PatientCreate extends LitElement {
                 <app-alert-modal @alert-cancelled=${() => this.dispatchCancelAlert()} @alert-continued=${() => this.dispatchContinueAlert()} ></app-alert-modal>
             `}
         `;
-    };
-
-    renderLesions(lesions){
-        return !lesions ? html``: lesions.map(lesion => html`
-            <kor-table-row slot="header">
-                <kor-table-cell head grid-cols="1">${lesion.localization}</kor-table-cell>
-                <kor-table-cell head grid-cols="1">${lesion.verbatim}</kor-table-cell>
-                <kor-table-cell head grid-cols="1">${lesion.lymphNode}</kor-table-cell>
-                <kor-table-cell head grid-cols="1">${lesion.basal}</kor-table-cell>
-            </kor-table-row>
-        `);
     };
 }
 

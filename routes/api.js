@@ -4,7 +4,7 @@ const db = require('./db');
 exports.searchPatients = async function (req, res, next) {
     var id = req.query.id_like;
 
-    var query = !id ? `select id_patient, id_research, DATE_FORMAT(date, '%d-%m-%Y') as date_formatted from CRO.PATIENTS where id_patient` : `select id_patient, id_research, DATE_FORMAT(date, '%d-%m-%Y') as date_formatted from CRO.PATIENTS where id_patient like '${id}%'`
+    var query = !id ? `select patients.id_patient as id_patient, researches.name as research, DATE_FORMAT(patients.date, '%d-%m-%Y') as date_formatted from CRO.PATIENTS patients, CRO.RESEARCHES researches where patients.id_research = researches.id_research` : `select patients.id_patient as id_patient, patients.id_research, researches.name as research, DATE_FORMAT(patients.date, '%d-%m-%Y') as date_formatted from CRO.PATIENTS patients, CRO.RESEARCHES researches where patients.id_research = researches.id_research and id_patient like '${id}%'`
 
     let conn;
     try {
@@ -14,7 +14,7 @@ exports.searchPatients = async function (req, res, next) {
         for (i = 0, len = rows.length; i < len; i++) {
             patients.push({
                 id: rows[i].id_patient,
-                research: rows[i].id_research,
+                research: rows[i].research,
                 date: rows[i].date_formatted
             })
         }
@@ -56,11 +56,11 @@ exports.getPatientById = async function (req, res, next) {
         var patient = {};
 
         conn = await db.pool.getConnection();
-        const rows = await conn.query(`select id_patient, id_research, DATE_FORMAT(date, '%d-%m-%Y') as date_formatted from CRO.PATIENTS where id_patient = ?`,[id]);
+        const rows = await conn.query(`select patients.id_patient, patients.id_research, researches.name as research, DATE_FORMAT(patients.date, '%d-%m-%Y') as date_formatted from CRO.PATIENTS patients, CRO.RESEARCHES researches where patients.id_research = researches.id_research and id_patient = ?`,[id]);
         for (i = 0, len = rows.length; i < len; i++) {
             patient = {
                 id: rows[i].id_patient,
-                research: rows[i].id_research,
+                research: rows[i].research,
                 date: rows[i].date_formatted,
                 targetLesions: [],
                 nonTargetLesions: []

@@ -16,7 +16,7 @@ class LesionsTable extends LitElement {
 
     static styles = css`
         ::slotted (*) {
-            grid-template-columns: 1fr 2fr 1fr 2fr 1fr;
+            grid-template-columns: 1fr 2fr 1fr 1fr 1fr;
         }
     `;
     

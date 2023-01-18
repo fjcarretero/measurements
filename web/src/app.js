@@ -22,15 +22,20 @@ class App extends LitElement {
         this.createView = false;
         this.openModal = false;
         this.patientsDataProvider = new PatientsDataProvider();
+        //this.getResearchs();
     };
 
     toggleCreateView() {
         this.createView = !this.createView;
     }
 
-    async openModalView() {
+    async getResearchs() {
+        this.researchs = await this.patientsDataProvider.getResearchs();
+    }
+
+    openModalView() {
         if(!this.researchs)
-            this.researchs = await this.patientsDataProvider.getResearchs();
+            this.getResearchs();
         this.openModal = true;
     }
 
@@ -43,6 +48,9 @@ class App extends LitElement {
             targetLesions: [],
             nonTargetLesions: []
         }
+        console.log("patientAddedListener");
+
+        console.log(this.newPatient);
         this.createView = true;
         this.openModal = false;
     }

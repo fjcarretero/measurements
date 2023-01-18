@@ -77,7 +77,7 @@ exports.calculateTargetResponse = function (measurements, lesions, sumDiameters,
     //Si la fecha anterior es PD, entonces devuelvo PD
     //Si alguna de las mediciones es NE, entonces devuelvo NE
     //Si la suma de diametros es 0, devuelvo CR
-    //Si todas las mediciones de las lesiones con "Lymph Node" "YES" y medicion menor que 10, devuelvo CR
+    //Si todas las mediciones de las lesiones con "Lymph Node" "YES" y medicion menor que 10, y todas las lesiones con "Lymph Node" "NO" y medicion 0, devuelvo CR
     //Si la resta de los diametros y el nadir es mayor o igual de 5 mm y el % frente al Nadir es mayor de 20% entonces devuelvo PD
     //Si el % frente al basal es menor que el -30%, devuelvo PR
     measurements.map(measurement => {
@@ -85,7 +85,7 @@ exports.calculateTargetResponse = function (measurements, lesions, sumDiameters,
             response[measurement.date] = "PD"
         } else if(sumDiameters[measurement.date] == 0) {
             response[measurement.date] = "CR"
-        } else if ((lesions.filter(lesion => lesion.lymphNode=="YES" && measurement.data[lesion.id] < 10)).length > 0) {
+        } else if (lesions.filter(lesion => (lesion.lymphNode=="YES" && measurement.data[lesion.id] < 10) || (lesion.lymphNode=="NO" && measurement.data[lesion.id] == 0)).length ===lesions.length) {
             response[measurement.date] = "CR"
         } else if (sumDiameters[measurement.date]-nadir[measurement.date]>=5 && percentageFromNADIR[measurement.date]>=20) {
             response[measurement.date] = "PD"
