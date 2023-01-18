@@ -36,7 +36,7 @@ class LesionsTable extends LitElement {
                 ${!this.status ? html`` : html`
                     <kor-badge slot="functions" status=${this.status}></kor-badge>
                 `}
-                <kor-table condensed flex-direction="row" columns="1fr 2fr 1fr 1fr 2fr">
+                <kor-table condensed flex-direction="row" columns="45px 120px 150px 70px 90px">
                     <kor-table-row slot="header">
                         <kor-table-cell head grid-cols="1">ID</kor-table-cell>
                         <kor-table-cell head grid-cols="1">Localization</kor-table-cell>
