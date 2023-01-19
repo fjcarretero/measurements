@@ -1,3 +1,4 @@
+//FIXME: 
 
 exports.calculateSumDiametersBasal = function (lesions) {
     let sumDiametersBasal = 0;

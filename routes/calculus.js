@@ -17,22 +17,26 @@ exports.includeCalculus = (bodyJSON, patientData) => {
     if (bodyJSON[0]?.patientId) {
         let patientId = bodyJSON[0].patientId
 
+        let bodyJSONSorted = [...bodyJSON];
+
+        bodyJSONSorted.sort((a, b) => this.convert2Date(a.date) - this.convert2Date(b.date));
+
         //let patientData = db.patients.filter(patient => patient.id == patientId)[0];
         const sumDiametersBasal = formulas.calculateSumDiametersBasal(patientData.targetLesions);
         //console.log(sumDiametersBasal);
-        let sumDiameters = formulas.calculateSumDiameters(bodyJSON, sumDiametersBasal);
+        let sumDiameters = formulas.calculateSumDiameters(bodyJSONSorted, sumDiametersBasal);
         //console.log(sumDiameters);
-        const nadir = formulas.calculateNADIR(bodyJSON, sumDiameters);
+        const nadir = formulas.calculateNADIR(bodyJSONSorted, sumDiameters);
         //console.log(nadir);
-        const percentageFromBasal = formulas.calculatePercentageFromBasal(bodyJSON, sumDiameters);
+        const percentageFromBasal = formulas.calculatePercentageFromBasal(bodyJSONSorted, sumDiameters);
         //console.log(percentageFromBasal);
-        const percentageFromNADIR = formulas.calculatePercentageFromNADIR(bodyJSON, sumDiameters, nadir);
+        const percentageFromNADIR = formulas.calculatePercentageFromNADIR(bodyJSONSorted, sumDiameters, nadir);
         //console.log(percentageFromNADIR);
-        const targetResponse = formulas.calculateTargetResponse(bodyJSON, patientData.targetLesions, sumDiameters, nadir, percentageFromBasal, percentageFromNADIR);
+        const targetResponse = formulas.calculateTargetResponse(bodyJSONSorted, patientData.targetLesions, sumDiameters, nadir, percentageFromBasal, percentageFromNADIR);
         //console.log(targetResponse);
-        const nonTargetResponse = formulas.calculateNonTargetResponse(bodyJSON);
+        const nonTargetResponse = formulas.calculateNonTargetResponse(bodyJSONSorted);
         //console.log(nonTargetResponse);
-        const overallResponse = formulas.calculateOverallResponse(bodyJSON, targetResponse, nonTargetResponse);
+        const overallResponse = formulas.calculateOverallResponse(bodyJSONSorted, targetResponse, nonTargetResponse);
         //console.log(overallResponse);
 
         //console.log(bodyJSON);
@@ -59,4 +63,10 @@ exports.includeCalculus = (bodyJSON, patientData) => {
         //console.log(bodyJSON);
     }
     return bodyJSON;
+}
+
+exports.convert2Date(dateString) {
+    let dateArray = dateString.split('-');
+
+    return new Date(+dateArray[2], dateArray[1]-1, +dateArray[0]);
 }
