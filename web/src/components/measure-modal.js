@@ -232,7 +232,7 @@ class MeasureModal extends LitElement {
                 <kor-button slot="footer" color="primary" label="Add" @click=${() => this.dispatchSaveMeasure()}></kor-button>
             </kor-modal>
             ${!this._showAlert ? html `` : html `
-                <app-alert-modal @alert-cancelled=${() => this.dispatchCancelAlert()} @alert-continued=${() => this.dispatchContinueAlert()} ></app-alert-modal>
+                <app-alert-modal message="If you go back, you will lose your data for this register. Do you want to continue?" @alert-cancelled=${() => this.dispatchCancelAlert()} @alert-continued=${() => this.dispatchContinueAlert()} ></app-alert-modal>
             `}
         `;
     }

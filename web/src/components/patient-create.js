@@ -25,6 +25,8 @@ class PatientCreate extends LitElement {
         this._showAlert = false;
         this.addEventListener('target-lesion-added', this.addTargetLesion);
         this.addEventListener('non-target-lesion-added', this.addNonTargetLesion);
+        this.addEventListener('target-lesion-deleted', this.deleteTargetLesion);
+        this.addEventListener('non-target-lesion-deleted', this.deleteNonTargetLesion);
     };
 
     update(changed) {
@@ -72,6 +74,26 @@ class PatientCreate extends LitElement {
         this.patient = {
             ...this.patient, 
             nonTargetLesions: [...this.patient.nonTargetLesions, detail]
+        }
+    }
+
+    deleteTargetLesion({detail}) {
+        console.log("deleteTargetLesion");
+        console.log(detail);
+        this.targetLesionIndex--;
+        this.patient = {
+            ...this.patient, 
+            targetLesions: this.patient.targetLesions.filter(lesion => lesion.id != detail)
+        }
+    }
+
+    deleteNonTargetLesion({detail}) {
+        console.log("deleteNonTargetLesion");
+        console.log(detail);
+        this.nonTargetLesionIndex--;
+        this.patient = {
+            ...this.patient, 
+            nonTargetLesions: this.patient.nonTargetLesions.filter(lesion => lesion.id != detail)
         }
     }
 
@@ -146,7 +168,7 @@ class PatientCreate extends LitElement {
                 <kor-button slot="footer" label="< Back" @click=${() => this.dispatchBack()}></kor-button>
             </kor-card>
             ${!this._showAlert ? html `` : html `
-                <app-alert-modal @alert-cancelled=${() => this.dispatchCancelAlert()} @alert-continued=${() => this.dispatchContinueAlert()} ></app-alert-modal>
+                <app-alert-modal message="If you go back, you will lose your data for this register. Do you want to continue?" @alert-cancelled=${() => this.dispatchCancelAlert()} @alert-continued=${() => this.dispatchContinueAlert()} ></app-alert-modal>
             `}
         `;
     };
