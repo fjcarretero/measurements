@@ -1,6 +1,8 @@
 export class PatientsDataProvider {
-    async getPatients(patientId) {
-      const url = !patientId ? '/api/patients' : '/api/patients?id_like=' + patientId;
+    async getPatients(patientId, researchId) {
+      let url = '/api/patients' ;
+      url = !patientId ? url : url + '?id_like=' + patientId;
+      url = !researchId ? url : url + (!patientId ? '?' : '&') + 'research=' + researchId;
       let response = await fetch(url, {
         method: 'GET',
         headers: {

@@ -2,9 +2,13 @@ const calculus = require('./calculus');
 const db = require('./db');
 
 exports.searchPatients = async function (req, res, next) {
-    var id = req.query.id_like;
+    const id = req.query.id_like;
+    const research = req.query.research;
 
-    var query = !id ? `select patients.id_patient as id_patient, researches.name as research, DATE_FORMAT(patients.date, '%d-%m-%Y') as date_formatted from CRO.PATIENTS patients, CRO.RESEARCHES researches where patients.id_research = researches.id_research` : `select patients.id_patient as id_patient, patients.id_research, researches.name as research, DATE_FORMAT(patients.date, '%d-%m-%Y') as date_formatted from CRO.PATIENTS patients, CRO.RESEARCHES researches where patients.id_research = researches.id_research and id_patient like '${id}%'`
+    //var query = !id ? `select patients.id_patient as id_patient, researches.name as research, DATE_FORMAT(patients.date, '%d-%m-%Y') as date_formatted from CRO.PATIENTS patients, CRO.RESEARCHES researches where patients.id_research = researches.id_research` : `select patients.id_patient as id_patient, patients.id_research, researches.name as research, DATE_FORMAT(patients.date, '%d-%m-%Y') as date_formatted from CRO.PATIENTS patients, CRO.RESEARCHES researches where patients.id_research = researches.id_research and id_patient like '${id}%'`
+    var query = `select patients.id_patient as id_patient, researches.name as research, DATE_FORMAT(patients.date, '%d-%m-%Y') as date_formatted from CRO.PATIENTS patients, CRO.RESEARCHES researches where patients.id_research = researches.id_research`;
+    query = !id ? query : query + ` and id_patient like '${id}%'`
+    query = !research ? query : query + ` and patients.id_research = '${research}'`
 
     let conn;
     try {

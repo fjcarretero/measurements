@@ -22,7 +22,7 @@ class App extends LitElement {
         this.createView = false;
         this.openModal = false;
         this.patientsDataProvider = new PatientsDataProvider();
-        //this.getResearchs();
+        this.getResearchs();
     };
 
     toggleCreateView() {
@@ -96,7 +96,7 @@ class App extends LitElement {
         return this.patient ? html`
             <app-patient-detail @back=${this.backListener} .patientId=${this.patient.id} style="max-width: 1024px; width: 100%; margin: 0 auto;"></app-patients-detail>
         `: html`
-            <app-patients-search @patientSelected=${this.patientSelectedListener} style="max-width: 1024px; width: 100%; margin: 0 auto;"></app-patients-search>
+            <app-patients-search @patientSelected=${this.patientSelectedListener} .researchs=${this.researchs} style="max-width: 1024px; width: 100%; margin: 0 auto;"></app-patients-search>
         `;
     };
 }
