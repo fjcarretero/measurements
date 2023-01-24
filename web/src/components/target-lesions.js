@@ -13,14 +13,14 @@ class TargetLesions extends LitElement {
         layout: {state: true},
         expanded: {state: true},
         create: {type: Boolean},
-        date: {}
+        date: {},
+        _lesionLocations: {type: Array}
     };
     
     constructor() {
         super();
         this.expanded = false;
-        console.log("constructor - TargetLesions")
-        //this.addEventListener('target-lesion-added', this.addTargetLesion);
+        this._lesionLocations = ["NA", "BRAIN", "BREAST", "LIVER", "LUNG", "LYMPH NODES", "PANCREAS", "SPLEEN", "STOMACH", "TL-LOC1", "TL-LOC2", "TL-LOC3", "TL-LOC4", "TL-LOC5", "TL-LOC6", "TL-LOC7"];
     };
 
     static styles = 
@@ -92,10 +92,10 @@ class TargetLesions extends LitElement {
 
     render(){
         return !this.lesions ? html``: html`
-            <app-lesions-table .label=${"Target Lesions"} .rows=${this.lesions} prefix="target" ?create=${this.create} .status=${this.status} .date=${this.date}>
+            <app-lesions-table .lesionLocations=${this._lesionLocations} .label=${"Target Lesions"} .rows=${this.lesions} prefix="target" ?create=${this.create} .status=${this.status} .date=${this.date}>
                 ${this.layout && !this.create ? html`
                 <kor-table columns="1fr 2fr 1fr 2fr 1fr">
-                <kor-table-row style="grid-template-columns: 1fr 2fr 1fr 2fr 1fr;">
+                <kor-table-row style="grid-template-columns: 1fr 2fr 1fr 2fr 1fr; min-height: 40px;">
                     <kor-table-cell @click=${() => this.openCalculus()} head grid-cols="${this.layout.response.span}" style="min-width: calc(24px + var(--spacing-l) * 2); max-width: 160px; padding: var(--spacing-xs) var(--spacing-m);">
                         <kor-icon button class="expand" icon="keyboard_arrow_down"></kor-icon>
                         Response

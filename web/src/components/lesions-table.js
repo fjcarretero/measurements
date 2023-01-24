@@ -9,6 +9,7 @@ class LesionsTable extends LitElement {
         label: {},
         rows: {},
         prefix: {},
+        lesionLocations: {type: Array},
         addLesionModal: {type: Boolean},
         create: {type: Boolean},
         date: {},
@@ -60,7 +61,7 @@ class LesionsTable extends LitElement {
                     <kor-table condensed flex-direction="row" columns="45px 120px 150px 70px 90px">
                         <kor-table-row slot="header">
                             <kor-table-cell head grid-cols="1">ID</kor-table-cell>
-                            <kor-table-cell head grid-cols="1">Localization</kor-table-cell>
+                            <kor-table-cell head grid-cols="1">Location</kor-table-cell>
                             <kor-table-cell head grid-cols="1">Verbatim</kor-table-cell>
                             <kor-table-cell head grid-cols="1">Lymph</br>Node</kor-table-cell>
                             <kor-table-cell head grid-cols="1" alignment="right">Basal</br>${this.date}</kor-table-cell>
@@ -85,7 +86,7 @@ class LesionsTable extends LitElement {
                 `}
             </kor-card>
             ${!this.addLesionModal ? html`` : html`
-                <app-lesion-modal .prefix=${this.prefix} @lesion-closed=${this.lesionsModalClosedListener}></app-lesion-modal>
+                <app-lesion-modal .lesionLocations=${this.lesionLocations} .prefix=${this.prefix} @lesion-closed=${this.lesionsModalClosedListener}></app-lesion-modal>
             `}
             ${!this._showAlert ? html `` : html `
                 <app-alert-modal message="Do you want to delete this lesion?" @alert-cancelled=${() => this.dispatchCancelAlert()} @alert-continued=${() => this.dispatchContinueAlert()} ></app-alert-modal>

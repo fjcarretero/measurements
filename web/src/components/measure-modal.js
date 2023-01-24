@@ -1,19 +1,21 @@
 import '@kor-ui/kor';
-import {html, LitElement} from 'lit';
+import { html, LitElement } from 'lit';
+import { convert2Date } from '../utils/utils.js';
 import './alert-modal.js';
 
 class MeasureModal extends LitElement {
     static properties = {
         patient: {},
         newMeasure: {},
+        lastDateMeasurement: {},
         _targetLesionsDisabled: {},
         _targetLesionsBackup: {},
         _dateStatus: {state: true},
         _targetLesionsStatus: {state: true},
         _nonTargetLesionsStatus: {state: true},
         _newLesionsStatus: {state: true},
-        _showAlert: {type: Boolean, state: true}
-        //openCloseVariable: {type: Boolean, reflect: true}
+        _showAlert: {type: Boolean, state: true},
+        _dateBeforeLatest: {type: Boolean, state: true}
     };
     
     constructor() {
@@ -23,45 +25,8 @@ class MeasureModal extends LitElement {
         this._targetLesionsStatus = {};
         this._nonTargetLesionsStatus = {};
         this._showAlert = false;
-        //this.openCloseVariable = false;
+        this._dateBeforeLatest = false;
     };
-
-    // attributeChangedCallback(name, oldval, newval) {
-    //     super.attributeChangedCallback(name, oldval, newval);
-    //     console.log("attributeChangedCallback");
-    //     if(name == "patient" && newval != null) {
-    //         this.initPatientVariables();
-    //     }
-    //     if(name == "openclosevariable" && newval != null) {
-    //         this.initVariables();
-    //     }
-    // }
-
-    // initPatientVariables() {
-    //     console.log("init variables");
-    //     if (this.patient) {
-    //         Object.keys(this.patient.targetLesions).map((lesion) => {
-    //             this._targetLesionsDisabled[this.patient.targetLesions[lesion].id] = false
-    //         });
-    //     }
-    // }
-
-    // initVariables() {
-    //     this._targetLesionsDisabled = {};
-    //     this._targetLesionsBackup = {};
-    //     this._targetLesionsStatus = {};
-    //     this._nonTargetLesionsStatus = {};
-    //     this._dateStatus = null;
-    //     this._newLesionsStatus = null;
-    // }
-
-    // update(changedProperties) {
-    //     super.update(changedProperties);
-    //     //console.log(changedProperties);
-    //     if(changedProperties.has("openCloseVariable") && !changedProperties.get("openCloseVariable")) {
-    //         this.initVariables();
-    //     }
-    // }
 
     disconnectedCallback(){
         super.disconnectedCallback();
@@ -72,6 +37,7 @@ class MeasureModal extends LitElement {
         this._dateStatus = null;
         this._newLesionsStatus = null;
         this._showAlert = false;
+        this._dateBeforeLatest = false;
     }
 
     changeValue(type, lesion){
@@ -106,13 +72,6 @@ class MeasureModal extends LitElement {
         } else {
             this.newMeasure.data[lesion] = this._targetLesionsBackup[lesion]
         }
-    }
-
-    modifyObject2(sourceObject, key, value){
-        var target = {};
-        target[key] = value;
-        delete sourceObject[key];
-        return Object.assign(target, sourceObject);
     }
 
     modifyObject(sourceObject, key, value){
@@ -167,7 +126,6 @@ class MeasureModal extends LitElement {
     }
 
     validateNewLesions() {
-        console.log("validateNewLesions");
         if (!this.newMeasure.data.newLesions) { 
             this._newLesionsStatus =  "error";
             return false;
@@ -177,18 +135,25 @@ class MeasureModal extends LitElement {
         }
     }
 
-    dispatchSaveMeasure () {
+    saveMeasure () {
         if(this.validateForm()){
-            this.dispatchEvent(new CustomEvent('measureModified', {
-                detail: this.newMeasure,
-                bubbles: true,
-                composed: true,
-            }));
-            //this.openCloseVariable = false;
+            if (convert2Date(this.newMeasure.date) <= this.lastDateMeasurement) {
+                this._dateBeforeLatest = true;
+            } else {
+                this.dispatchSaveMeasure();
+            }
         }
     }
 
-    dispatchCloseMeasure () {
+    dispatchSaveMeasure () {
+        this.dispatchEvent(new CustomEvent('measure-created', {
+            detail: this.newMeasure,
+            bubbles: true,
+            composed: true,
+        }));
+    }
+
+    closeMeasure () {
         this._showAlert = true;
     }
 
@@ -198,25 +163,38 @@ class MeasureModal extends LitElement {
 
     dispatchContinueAlert () {
         //console.log("dispatchCloseMeasure");
-        this.dispatchEvent(new CustomEvent('measureClosed', {
+        this.dispatchEvent(new CustomEvent('measure-closed', {
             detail: '',
             bubbles: true,
             composed: true,
         }));
         this._showAlert = false;
-        //this.openCloseVariable = false;
+    }
+
+    dispatchCancelAlertDate () {
+        this._targetLesionsDisabled = {};
+        this._targetLesionsBackup = {};
+        this._targetLesionsStatus = {};
+        this._nonTargetLesionsStatus = {};
+        this._dateStatus = null;
+        this._newLesionsStatus = null;
+        this._dateBeforeLatest = false;
+    }
+
+    dispatchContinueAlertDate () {
+        this.dispatchSaveMeasure();
+        this._dateBeforeLatest = false;
     }
 
     render() {
-        //this.initVariables()
         return html`
             <kor-modal id="addMeasure" visible sticky label="Add Measure" height="1000">
                 <kor-input tabindex="1" @value-changed=${this.changeValue(null,  "date")} label="Date" autofocus="true" type="date" .status=${this._dateStatus}></kor-input>
                 <kor-card style="flex-wrap;" flat label="Target Lesions" flat flex-direction="column">
-                    ${this.renderTargetLocalizations()}
+                    ${this.renderTargetLocations()}
                 </kor-card>
                 <kor-card style="flex-wrap;" flat label="Non Target Lesions" flat flex-direction="column">
-                    ${this.renderNonTargetLocalizations()}
+                    ${this.renderNonTargetLocations()}
                 </kor-card>
                 <kor-card style="flex-wrap;" flat flex-direction="row">
                     <kor-text style="flex: 4 1;">New Lesions</kor-text>
@@ -228,16 +206,19 @@ class MeasureModal extends LitElement {
                         <kor-badge .status=${this._newLesionsStatus}></kor-badge>` 
                     : ''}
                 </kor-card>
-                <kor-button slot="footer" color="secondary" label="Close" @click=${() => this.dispatchCloseMeasure()}></kor-button>
-                <kor-button slot="footer" color="primary" label="Add" @click=${() => this.dispatchSaveMeasure()}></kor-button>
+                <kor-button slot="footer" color="secondary" label="Close" @click=${() => this.closeMeasure()}></kor-button>
+                <kor-button slot="footer" color="primary" label="Add" @click=${() => this.saveMeasure()}></kor-button>
             </kor-modal>
             ${!this._showAlert ? html `` : html `
                 <app-alert-modal message="If you go back, you will lose your data for this register. Do you want to continue?" @alert-cancelled=${() => this.dispatchCancelAlert()} @alert-continued=${() => this.dispatchContinueAlert()} ></app-alert-modal>
             `}
+            ${!this._dateBeforeLatest ? html `` : html `
+                <app-alert-modal message="You have entered a date previous to the latest measure. Do yo want to continue?" @alert-cancelled=${() => this.dispatchCancelAlertDate()} @alert-continued=${() => this.dispatchContinueAlertDate()} ></app-alert-modal>
+            `}
         `;
     }
 
-    renderTargetLocalizations(){
+    renderTargetLocations(){
         return !this.patient.targetLesions  ? html``: Object.keys(this.patient.targetLesions).map((lesion, index) => html`
             <kor-card style="flex-wrap;" flat flex-direction="row">
                 <kor-input min=0 .disabled=${this._targetLesionsDisabled[this.patient.targetLesions[lesion].id]} style="flex: 2 1;" tabindex="${1+index}" id=${this.patient.targetLesions[lesion].id} @value-changed=${this.changeValue("data", this.patient.targetLesions[lesion].id)} label="${this.patient.targetLesions[lesion].localization}" type="number"></kor-input>
@@ -249,7 +230,7 @@ class MeasureModal extends LitElement {
         `);
     };
 
-    renderNonTargetLocalizations(){
+    renderNonTargetLocations(){
         return !this.patient.nonTargetLesions ? html``:  Object.keys(this.patient.nonTargetLesions).map((lesion, index) => html`
             <kor-card style="flex-wrap;" flat flex-direction="row">
                 <kor-text style="flex: 1 1;">${this.patient.nonTargetLesions[lesion].localization}</kor-text>

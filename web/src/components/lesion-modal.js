@@ -6,6 +6,7 @@ class LesionModal extends LitElement {
     static properties = {
         newLesion: {},
         prefix: {},
+        lesionLocations: {type: Array},
         _localizationStatus: {state: true},
         _verbatimStatus: {state: true},
         _lymphNodeStatus: {state: true},
@@ -196,36 +197,18 @@ class LesionModal extends LitElement {
         //this.initVariables()
         return html`
             <kor-modal id="addLesion" visible sticky label="Add Lesion" height="1000">
-                <kor-input tabindex="1" @value-changed=${this.changeValueLocation()} label="Localization" autofocus="true" type="select" .status=${this._localizationStatus}>
-                    <kor-menu-item label="NA"></kor-menu-item>
-                    <kor-menu-item label="BRAIN"></kor-menu-item>
-                    <kor-menu-item label="BREAST"></kor-menu-item>
-                    <kor-menu-item label="LIVER"></kor-menu-item>
-                    <kor-menu-item label="LUNG"></kor-menu-item>
-                    <kor-menu-item label="LYMPH NODES"></kor-menu-item>
-                    <kor-menu-item label="PANCREAS"></kor-menu-item>
-                    <kor-menu-item label="SPLEEN"></kor-menu-item>
-                    <kor-menu-item label="STOMACH"></kor-menu-item>
+                <kor-input tabindex="1" @value-changed=${this.changeValueLocation()} label="Location" autofocus="true" type="select" .status=${this._localizationStatus}>
+                    ${!this.lesionLocations ? html ``: this.lesionLocations.map(lesionLocation => html `
+                        <kor-menu-item label="${lesionLocation}"></kor-menu-item>
+                    `)}
                 </kor-input>
                 <kor-input tabindex="2" @value-changed=${this.changeValueVerbatim()} label="Verbatim" autofocus="true" .status=${this._verbatimStatus}></kor-input>
-                <!--
-                <kor-card style="flex-wrap;" flat flex-direction="row">
-                    <kor-text style="flex: 4 1;">Lymph Node</kor-text>
-                    <kor-switch style="flex: 1 1;">
-                        <kor-switch-item @active-changed=${this.setValue("lymphNode", "NO")} label="NO"></kor-switch-item>
-                        <kor-switch-item @active-changed=${this.setValue("lymphNode", "YES")} label="YES"></kor-switch-item>
-                    </kor-switch>
-                    ${this._lymphNodeStatus ? html`
-                        <kor-badge .status=${this._lymphNodeStatus}></kor-badge>` 
-                    : ''}
-                </kor-card>
-                -->
                 ${this.prefix == "target" ? html`
                     <kor-input tabindex="4" @value-changed=${this.changeValue("basal")} label="Basal" autofocus="true" type="Number" .status=${this._basalStatus}></kor-input>` :
                 html`
                     <kor-card style="flex-wrap;" flat flex-direction="row">
-                        <kor-text style="flex: 4 1;">Basal</kor-text>
-                        <kor-tool @active-changed=${() => this.toggleBasal()} label="PRESENT" toggle></kor-tool>
+                        <kor-text style="flex: 3 1; padding: var(--spacing-s);">Basal</kor-text>
+                        <kor-tool style="flex: 1 1;" @active-changed=${() => this.toggleBasal()} label="PRESENT" toggle></kor-tool>
                         ${this._basalStatus ? html`
                             <kor-badge .status=${this._basalStatus}></kor-badge>` 
                         : ''}
@@ -235,7 +218,7 @@ class LesionModal extends LitElement {
                 <kor-button slot="footer" color="primary" label="Add" @click=${() => this.dispatchSaveLesion()}></kor-button>
             </kor-modal>
             ${!this._showAlert ? html `` : html `
-                <app-alert-modal @alert-cancelled=${() => this.dispatchCancelAlert()} @alert-continued=${() => this.dispatchContinueAlert()} ></app-alert-modal>
+                <app-alert-modal message="If you go back, you will lose your data for this register. Do you want to continue?" @alert-cancelled=${() => this.dispatchCancelAlert()} @alert-continued=${() => this.dispatchContinueAlert()} ></app-alert-modal>
             `}
         `;
     }

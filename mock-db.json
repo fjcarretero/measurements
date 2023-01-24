@@ -113,6 +113,30 @@
         }
       ],
       "nonTargetLesions": []
+    },
+    {
+      "id": "124",
+      "researchName": "research1",
+      "research": 1,
+      "date": "1999-01-01",
+      "targetLesions": [
+        {
+          "localization": "BRAIN",
+          "lymphNode": "NO",
+          "basal": "12",
+          "verbatim": "",
+          "id": "tl1"
+        }
+      ],
+      "nonTargetLesions": [
+        {
+          "localization": "BONE",
+          "lymphNode": "NO",
+          "basal": "PRE",
+          "verbatim": "",
+          "id": "ntl1"
+        }
+      ]
     }
   ],
   "measurements": [
@@ -257,6 +281,28 @@
       },
       "patientId": "123130",
       "id": 13
+    },
+    {
+      "date": "1999-02-01",
+      "data": {
+        "tl1": "12",
+        "ntl1": "UC",
+        "newLesions": "NO"
+      },
+      "patientId": "124",
+      "id": 14
+    },
+    {
+      "date": "1999-01-01",
+      "data": {
+        "tl1": "12",
+        "tl2": "12",
+        "ntl1": "UC",
+        "ntl2": "UC",
+        "newLesions": "NO"
+      },
+      "patientId": "123123",
+      "id": 15
     }
   ]
 }

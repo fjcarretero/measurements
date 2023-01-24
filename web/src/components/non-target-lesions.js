@@ -11,12 +11,13 @@ class NonTargetLesions extends LitElement {
         suffix: {},
         layout: {},
         create: {type: Boolean},
-        date: {}
+        date: {},
+        _lesionLocations: {type: Array}
     };
     
     constructor() {
         super();
-       // this.addEventListener('non-target-lesion-added', this.addNonTargetLesion);
+        this._lesionLocations = ["NA", "ASCITIS", "BONE", "LEPTOMENINGEAL DISEASE", "LYMPH NODES", "PLEURAL EFFUSION", "NTL-LOC1", "NTL-LOC2", "NTL-LOC3", "NTL-LOC4", "NTL-LOC5", "NTL-LOC6", "NTL-LOC7", "NTL-LOC8", "NTL-LOC9", "NTL-LOC10"];
     };
 
     addNonTargetLesion({detail}) {
@@ -28,7 +29,7 @@ class NonTargetLesions extends LitElement {
 
     render(){
         return !this.lesions ? html``: html`
-            <app-lesions-table .label=${"Non Target Lesions"} .rows=${this.lesions} ?create=${this.create} prefix="non-target" .date=${this.date}>
+            <app-lesions-table .lesionLocations=${this._lesionLocations} .label=${"Non Target Lesions"} .rows=${this.lesions} ?create=${this.create} prefix="non-target" .date=${this.date}>
                 ${!this.create && this.lesions.length > 0 ? html`
                 <kor-table columns="1fr 2fr 1fr 2fr 1fr">
                     <kor-table-row style="grid-template-columns: 1fr 2fr 1fr 2fr 1fr;">

@@ -40,7 +40,7 @@ class Patient extends LitElement {
                     <kor-text>${this.patient.id}</kor-text>
                 </kor-card>
                 <kor-card flat flex-direction="row">
-                    <kor-text size="header-1">Research: </kor-text>
+                    <kor-text size="header-1">Project: </kor-text>
                     ${this.create ? html`
                         <kor-text>${this.patient.researchName}</kor-text>
                     ` : html `

@@ -113,6 +113,8 @@ class MeasurementNonTarget extends LitElement {
             return "background: rgba(var(--functional-red), 1); padding: 0;";
         } else if (value == "PR"){
             return "background: rgba(var(--functional-yellow), 1); padding: 0;";
+        } else if (value == "NoCR/NoPD"){
+            return "background: rgba(var(--base-2), 1); color: black; padding: 0; font-size: 12px;";
         } else {
             return "background: rgba(var(--base-2), 1); color: black; padding: 0;";
         }

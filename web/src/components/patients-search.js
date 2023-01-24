@@ -47,7 +47,7 @@ class PatientsSearch extends LitElement {
                     <kor-text>PatientId: </kor-text>
                     <kor-text>${patient.id}</kor-text>
  
-                    <kor-text>Research: </kor-text>
+                    <kor-text>Project: </kor-text>
                     <kor-text>${patient.research}</kor-text>
             </kor-card>
         `
@@ -60,7 +60,7 @@ class PatientsSearch extends LitElement {
                     <kor-text style="font-size: 20px;margin: 0;align-self: center;max-height: 70px" size="header-1">Search for patients</kor-text>
                     <kor-card flat="true" style="flex-wrap: wrap;flex: 1 1 100%;max-height: 70px" flex-direction="row">
                         <kor-input @input=${this.getPatientId} style="align-self: center;flex: 2 1;" label="Patient ID"  autofocus="true" type="text"></kor-input>
-                        <kor-input @value-changed=${this.changeValueResearch()} style="align-self: center;flex: 1 1;" label="Study"  autofocus="true" type="select">
+                        <kor-input @value-changed=${this.changeValueResearch()} style="align-self: center;flex: 1 1;" label="Project"  autofocus="true" type="select">
                             ${!this.researchs ? html`` : this.researchs.map(research => html`
                                 <kor-menu-item label=${research.name}></kor-menu-item>`
                             )}

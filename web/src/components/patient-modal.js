@@ -186,7 +186,7 @@ class PatientModal extends LitElement {
         return html`
             <kor-modal id="addLesion" visible sticky label="Add Patient" height="1000">
                 <kor-input tabindex="1" @value-changed=${this.changeValueId()} label="PatientId" autofocus="true" type="text" .status=${this._patientIdStatus}></kor-input>
-                <kor-input tabindex="2" @value-changed=${this.changeValueResearch()} label="Research" autofocus="true" type="select" .status=${this._researchStatus}>
+                <kor-input tabindex="2" @value-changed=${this.changeValueResearch()} label="Project" autofocus="true" type="select" .status=${this._researchStatus}>
                     ${!this.researchs ? html`` : this.researchs.map(research => html`
                         <kor-menu-item label=${research.name}></kor-menu-item>`
                     )}
@@ -203,7 +203,7 @@ class PatientModal extends LitElement {
                 <kor-button slot="footer" color="primary" label="Create" @click=${() => this.dispatchSavePatient()}></kor-button>
             </kor-modal>
             ${!this._showAlert ? html `` : html `
-                <app-alert-modal message="If you go back, you will lose your data for this register. Do you want to continue?" @alert-cancelled=${() => this.dispatchCancelAlert()} @alert-continued=${() => this.dispatchContinueAlert()} ></app-alert-modal>
+                <app-alert-modal message="${"If you go back, you will lose your data for this register. Do you want to continue?"}" @alert-cancelled="${() => this.dispatchCancelAlert()}" @alert-continued="${() => this.dispatchContinueAlert()}" ></app-alert-modal>
             `}
         `;
     }

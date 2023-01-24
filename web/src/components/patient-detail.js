@@ -4,6 +4,7 @@ import './measure-modal.js';
 import './lesions.js';
 import './measurements.js';
 import './patient.js';
+import {convert2Date} from '../utils/utils.js';
 import { PatientsDataProvider } from '../patients-data-provider.js';
 
 class PatientDetail extends LitElement {
@@ -59,9 +60,6 @@ class PatientDetail extends LitElement {
     }
 
     async saveMeasure({measurement}){
-        console.log("save measure");
-        console.log(this.newMeasure);
-        console.log(this.newLesions);
 
         let measure = await this.patientsDataProvider.addMeasurement(this.patientId, this.newMeasure);
 
@@ -79,9 +77,6 @@ class PatientDetail extends LitElement {
                 </kor-tabs>
                 <kor-card flex-direction="row" flat>
                     <app-lesions .patient=${this.patient}></app-lesions>
-                    <!-- <kor-card flex-direction="row" flat>
-                        <kor-icon icon="chevron_left"></kor-icon>
-                    </kor-card> -->
                     <app-measurements .expanded=${this.expanded} .patient=${this.patient} .measurements=${this.measurements}></app-measurements>
                 </kor-card>
                 ${this.renderModal()}  
@@ -102,7 +97,7 @@ class PatientDetail extends LitElement {
 
     renderModal(){
         return  !this.addMeasureModal ? html``: html`
-            <app-measure-modal @measureClosed=${this.closeAddMeasure} @measureModified=${this.saveMeasure} .patient=${this.patient} .newMeasure=${this.newMeasure}></app-measure-modal>
+            <app-measure-modal @measure-closed=${this.closeAddMeasure} @measure-created=${this.saveMeasure} .patient=${this.patient} .newMeasure=${this.newMeasure} .lastDateMeasurement=${Math.max(...this.measurements.map(m => convert2Date(m.date)))}></app-measure-modal>
         `;
     }
 }

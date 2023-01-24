@@ -47,9 +47,9 @@ class Measurements extends LitElement {
     renderMeasurements() {
         return !this.measurements ? html`` : this.measurements.map(measurement => html`
             <kor-card flat>
-                <p></p>
+                <p style="font: var(--header-2);"></p>
                 <app-measurement-target .expanded=${this.expanded} .rows=${this.patient.targetLesions} .measurement=${measurement}></app-measurement-target>
-                <p></p>
+                <p style="font-size: 15px;"></p>
                 <app-measurement-non-target .rows=${this.patient.nonTargetLesions} .measurement=${measurement}>
                     <app-measurement-new-lesions .measurement=${measurement}></app-measurement-new-lesions>
                     <app-measurement-overall .measurement=${measurement}></app-measurement-overall>

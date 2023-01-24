@@ -15,7 +15,6 @@ class AlertModal extends LitElement {
             bubbles: true,
             composed: true,
         }));
-
     }
 
     dispatchContinue () {

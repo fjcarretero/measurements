@@ -168,7 +168,7 @@ class PatientCreate extends LitElement {
                 <kor-button slot="footer" label="< Back" @click=${() => this.dispatchBack()}></kor-button>
             </kor-card>
             ${!this._showAlert ? html `` : html `
-                <app-alert-modal message="If you go back, you will lose your data for this register. Do you want to continue?" @alert-cancelled=${() => this.dispatchCancelAlert()} @alert-continued=${() => this.dispatchContinueAlert()} ></app-alert-modal>
+                <app-alert-modal message="${"If you go back, you will lose your data for this register. Do you want to continue?"}" @alert-cancelled=${() => this.dispatchCancelAlert()} @alert-continued=${() => this.dispatchContinueAlert()} ></app-alert-modal>
             `}
         `;
     };
