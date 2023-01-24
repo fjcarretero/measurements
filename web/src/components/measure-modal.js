@@ -213,7 +213,7 @@ class MeasureModal extends LitElement {
                 <app-alert-modal message="If you go back, you will lose your data for this register. Do you want to continue?" @alert-cancelled=${() => this.dispatchCancelAlert()} @alert-continued=${() => this.dispatchContinueAlert()} ></app-alert-modal>
             `}
             ${!this._dateBeforeLatest ? html `` : html `
-                <app-alert-modal message="You have entered a date previous to the latest measure. Do yo want to continue?" @alert-cancelled=${() => this.dispatchCancelAlertDate()} @alert-continued=${() => this.dispatchContinueAlertDate()} ></app-alert-modal>
+                <app-alert-modal message="The date entered is earlier than those previously registered. Do you want to continue?" @alert-cancelled=${() => this.dispatchCancelAlertDate()} @alert-continued=${() => this.dispatchContinueAlertDate()} ></app-alert-modal>
             `}
         `;
     }
