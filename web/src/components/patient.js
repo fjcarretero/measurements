@@ -37,15 +37,11 @@ class Patient extends LitElement {
             <kor-card flat flex-direction="row" style="justify-content: space-around; align-items: center;">
                 <kor-card flat flex-direction="row" align-content="center">
                     <kor-text size="header-1">PatientId: </kor-text>
-                    <kor-text>${this.patient.id}</kor-text>
+                    <kor-text>${this.patient.patientId}</kor-text>
                 </kor-card>
                 <kor-card flat flex-direction="row">
-                    <kor-text size="header-1">Project: </kor-text>
-                    ${this.create ? html`
-                        <kor-text>${this.patient.researchName}</kor-text>
-                    ` : html `
-                        <kor-text>${this.patient.research}</kor-text>
-                    `}
+                    <kor-text size="header-1">Study: </kor-text>
+                    <kor-text>${this.patient.study}</kor-text>
                 </kor-card>
             </kor-card>
         `;

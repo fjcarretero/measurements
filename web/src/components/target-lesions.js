@@ -91,6 +91,8 @@ class TargetLesions extends LitElement {
     }
 
     render(){
+        console.log("render target lesions")
+        console.log(this.lesions)
         return !this.lesions ? html``: html`
             <app-lesions-table .lesionLocations=${this._lesionLocations} .label=${"Target Lesions"} .rows=${this.lesions} prefix="target" ?create=${this.create} .status=${this.status} .date=${this.date}>
                 ${this.layout && !this.create ? html`

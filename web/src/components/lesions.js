@@ -19,6 +19,8 @@ class Lesions extends LitElement {
     };
 
     render() {
+        console.log("render lesions")
+        console.log(this.patient.targetLesions)
         return !this.patient ? html`` : html`
             <app-target-lesions .label="${'Target lesions'}" .lesions=${this.patient.targetLesions} .sumDiametersBasal=${this.patient.sumDiametersBasal} ?create=${this.create} .status=${this.targetLesionsStatus} .date=${this.patient.date}>
             </app-target-lesions>

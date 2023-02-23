@@ -1,19 +1,21 @@
 {
-  "researchs": [
+  "studies": [
     {
       "id": 1,
-      "name": "research1"
+      "name": "study1"
     },
     {
       "id": 2,
-      "name": "research2"
+      "name": "study2"
     }
   ],
-  "patients": [
+  "individualStudies": [
     {
-      "id": "123123",
+      "patientId": "123123",
       "date": "2020-01-01",
-      "research": 1,
+      "id": "1-123123",
+      "studyId": 1,
+      "study": "study1",
       "targetLesions": [
         {
           "id": "tl1",
@@ -48,8 +50,9 @@
       ]
     },
     {
-      "id": "123124",
-      "research": "research2",
+      "patientId": "123124",
+      "id": "2-123124",
+      "studyId": 2,
       "date": "2020-01-01",
       "targetLesions": [
         {
@@ -71,8 +74,9 @@
       ]
     },
     {
-      "id": "123125",
-      "research": "research2",
+      "patientId": "123125",
+      "studyId": 2,
+      "id": "2-123125",
       "date": "2020-01-01",
       "targetLesions": [
         {
@@ -86,8 +90,9 @@
       "nonTargetLesions": []
     },
     {
-      "id": "123130",
-      "research": "research1",
+      "id": "1-123130",
+      "studyId": 1,
+      "patientId": "123130",
       "targetLesions": [
         {
           "localization": "BRAIN",
@@ -100,8 +105,9 @@
       "nonTargetLesions": []
     },
     {
-      "id": "123",
-      "research": "research1",
+      "patientId": "123",
+      "id": "1-123",
+      "research": 1,
       "date": "2020-01-01",
       "targetLesions": [
         {
@@ -115,9 +121,9 @@
       "nonTargetLesions": []
     },
     {
-      "id": "124",
-      "researchName": "research1",
-      "research": 1,
+      "patientId": "124",
+      "studyId": 1,
+      "id": "1-124",
       "date": "1999-01-01",
       "targetLesions": [
         {
@@ -137,12 +143,62 @@
           "id": "ntl1"
         }
       ]
+    },
+    {
+      "patientId": "1",
+      "research": 1,
+      "id": "1-1",
+      "date": "1999-01-01",
+      "targetLesions": [
+        {
+          "localization": "BRAIN",
+          "lymphNode": "NO",
+          "basal": "12",
+          "verbatim": "",
+          "id": "tl1"
+        }
+      ],
+      "nonTargetLesions": []
+    },
+    {
+      "patientId": "32",
+      "study": "study2",
+      "studyId": 2,
+      "date": "1999-01-01",
+      "targetLesions": [
+        {
+          "localization": "LYMPH NODES",
+          "lymphNode": "YES",
+          "basal": "12",
+          "verbatim": "",
+          "id": "tl1"
+        }
+      ],
+      "nonTargetLesions": [],
+      "id": "2-32"
+    },
+    {
+      "patientId": "33",
+      "study": "study1",
+      "studyId": 1,
+      "date": "1999-01-01",
+      "targetLesions": [
+        {
+          "localization": "BRAIN",
+          "lymphNode": "NO",
+          "basal": "12",
+          "verbatim": "",
+          "id": "tl1"
+        }
+      ],
+      "nonTargetLesions": [],
+      "id": "1-33"
     }
   ],
   "measurements": [
     {
       "id": 1,
-      "patientId": "123123",
+      "individualStudyId": "1-123123",
       "date": "2020-02-23",
       "data": {
         "tl1": 12,
@@ -154,7 +210,7 @@
     },
     {
       "id": 2,
-      "patientId": "123123",
+      "individualStudyId": "1-123123",
       "date": "2020-07-12",
       "data": {
         "tl1": 11,
@@ -166,7 +222,7 @@
     },
     {
       "id": 3,
-      "patientId": "123123",
+      "individualStudyId": "1-123123",
       "date": "2021-02-12",
       "data": {
         "tl1": 17,
@@ -178,7 +234,7 @@
     },
     {
       "id": 4,
-      "patientId": "123124",
+      "individualStudyId": "2-123124",
       "date": "2021-11-01",
       "data": {
         "tl1": 17,
@@ -195,7 +251,7 @@
         "ntl2": "UI",
         "newLesions": "NO"
       },
-      "patientId": "123123",
+      "individualStudyId": "1-123123",
       "id": 5
     },
     {
@@ -205,7 +261,7 @@
         "ntl1": "NE",
         "newLesions": "NO"
       },
-      "patientId": "123124",
+      "individualStudyId": "2-123124",
       "id": 6
     },
     {
@@ -215,7 +271,7 @@
         "ntl1": "ABS",
         "newLesions": "YES"
       },
-      "patientId": "123124",
+      "individualStudyId": "2-123124",
       "id": 7
     },
     {
@@ -227,7 +283,7 @@
         "ntl2": "UC",
         "newLesions": "NO"
       },
-      "patientId": "123123",
+      "individualStudyId": "1-123123",
       "id": 8
     },
     {
@@ -239,7 +295,7 @@
         "ntl2": "UI"
       },
       "date": "2022-12-01",
-      "patientId": "123123",
+      "individualStudyId": "1-123123",
       "id": 9
     },
     {
@@ -251,7 +307,7 @@
         "ntl2": "UI",
         "newLesions": "NO"
       },
-      "patientId": "123123",
+      "individualStudyId": "1-123123",
       "id": 10
     },
     {
@@ -261,7 +317,7 @@
         "ntl1": "ABS",
         "newLesions": "NO"
       },
-      "patientId": "123124",
+      "individualStudyId": "2-123124",
       "id": 11
     },
     {
@@ -270,7 +326,7 @@
         "tl1": "14",
         "newLesions": "NO"
       },
-      "patientId": "123125",
+      "individualStudyId": "2-123125",
       "id": 12
     },
     {
@@ -279,7 +335,7 @@
         "tl1": "12",
         "newLesions": "NO"
       },
-      "patientId": "123130",
+      "individualStudyId": "1-123130",
       "id": 13
     },
     {
@@ -289,7 +345,7 @@
         "ntl1": "UC",
         "newLesions": "NO"
       },
-      "patientId": "124",
+      "individualStudyId": "1-124",
       "id": 14
     },
     {
@@ -301,8 +357,47 @@
         "ntl2": "UC",
         "newLesions": "NO"
       },
-      "patientId": "123123",
+      "individualStudyId": "1-123123",
       "id": 15
+    },
+    {
+      "date": "2020-03-20",
+      "data": {
+        "tl1": "12",
+        "tl2": "12",
+        "ntl1": "UC",
+        "ntl2": "UC",
+        "newLesions": "NO"
+      },
+      "individualStudyId": "1-123123",
+      "id": 16
+    },
+    {
+      "date": "2000-01-01",
+      "data": {
+        "tl1": "NE",
+        "newLesions": "NO"
+      },
+      "individualStudyId": "1-33",
+      "id": 17
+    },
+    {
+      "date": "2000-02-20",
+      "data": {
+        "tl1": "12",
+        "newLesions": "NO"
+      },
+      "individualStudyId": "1-33",
+      "id": 18
+    },
+    {
+      "date": "2000-02-20",
+      "data": {
+        "tl1": "12",
+        "newLesions": "NO"
+      },
+      "individualStudyId": "1-33",
+      "id": 19
     }
   ]
 }

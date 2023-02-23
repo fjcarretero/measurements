@@ -1,8 +1,9 @@
+
 export class PatientsDataProvider {
-    async getPatients(patientId, researchId) {
-      let url = '/api/patients' ;
-      url = !patientId ? url : url + '?id_like=' + patientId;
-      url = !researchId ? url : url + (!patientId ? '?' : '&') + 'research=' + researchId;
+    async getPatients(patientId, studyId) {
+      let url = '/api/individualStudies' ;
+      url = !patientId ? url : url + '?patientId_like=' + patientId;
+      url = !studyId ? url : url + (!patientId ? '?' : '&') + 'studyId=' + studyId;
       let response = await fetch(url, {
         method: 'GET',
         headers: {
@@ -12,17 +13,17 @@ export class PatientsDataProvider {
       return await response.json();
     }
     async postPatients(data) {
-      let response = await fetch('/api/patients' , {
+      let response = await fetch('/api/individualStudies' , {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(data)
       });
-      return await response.json();
+      return response;
     }
-    async getPatientById(patientId) {
-      let response = await fetch('/api/patients/' + patientId, {
+    async getPatientById(studyPatientId) {
+      let response = await fetch('/api/individualStudies/' + studyPatientId, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -30,8 +31,8 @@ export class PatientsDataProvider {
       });
       return await response.json();
     }
-    async getMeasuresByPatientId(patientId) {
-      let response = await fetch('/api/patients/' + patientId + '/measurements', {
+    async getMeasuresByPatientId(studyPatientId) {
+      let response = await fetch('/api/individualStudies/' + studyPatientId + '/measurements', {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -39,8 +40,8 @@ export class PatientsDataProvider {
       });
       return await response.json();
     }
-    async addMeasurement(patientId, data) {
-      let response = await fetch('/api/patients/' + patientId + '/measurements', {
+    async addMeasurement(studyPatientId, data) {
+      let response = await fetch('/api/individualStudies/' + studyPatientId + '/measurements', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -50,7 +51,7 @@ export class PatientsDataProvider {
       return await response.json();
     }
     async getResearchs() {
-      let response = await fetch('/api/researchs', {
+      let response = await fetch('/api/studies', {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',

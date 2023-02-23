@@ -6,6 +6,7 @@ import './components/patient-create.js';
 import './components/patient-modal.js';
 import './components/patient-detail.js';
 import './components/patients-search.js';
+import './components/notifications.js';
 
 class App extends LitElement {
 
@@ -14,16 +15,93 @@ class App extends LitElement {
         patient: {},
         createView: {},
         researchs: {type: Array},
-        openModal: {state: true}
+        openModal: {state: true},
+        targetLesionIndex: {state: true},
+        nonTargetLesionIndex:{state: true},
+        _notifications: {type: Array, state: true}
     };
     
     constructor() {
         super();
         this.createView = false;
         this.openModal = false;
+        this.nonTargetLesionIndex = 1;
+        this.targetLesionIndex = 1;
+        this._notifications = [];
+        this.addEventListener("notification", this.addNotification)
         this.patientsDataProvider = new PatientsDataProvider();
         this.getResearchs();
+        this.addEventListener('target-lesion-added', this.addTargetLesion);
+        this.addEventListener('non-target-lesion-added', this.addNonTargetLesion);
+        this.addEventListener('target-lesion-deleted', this.deleteTargetLesion);
+        this.addEventListener('non-target-lesion-deleted', this.deleteNonTargetLesion);
+        this.addEventListener('patient-lesions-deleted', this.deleteLesions);
     };
+
+    disconnectedCallback(){
+        super.disconnectedCallback()
+        console.log("disconnectedCallback");
+        this.newpatient = {};
+        this.targetLesionIndex = 1
+        this.nonTargetLesionIndex = 1
+    }
+
+    addTargetLesion({detail}) {
+        console.log("addTargetLesion");
+        console.log(detail);
+        console.log(this.targetLesionIndex);
+        detail.id = 'tl' + this.targetLesionIndex++;
+        console.log(detail);
+        this.newPatient = {
+            ...this.newPatient, 
+            targetLesions: [...this.newPatient.targetLesions, detail]
+        }
+        console.log(this.patient);
+    }
+
+    addNonTargetLesion({detail}) {
+        console.log("addNonTargetLesion");
+        console.log(detail);
+        detail.id = 'ntl' + this.nonTargetLesionIndex++;
+        this.newPatient = {
+            ...this.newPatient, 
+            nonTargetLesions: [...this.newPatient.nonTargetLesions, detail]
+        }
+    }
+
+    deleteTargetLesion({detail}) {
+        console.log("deleteTargetLesion");
+        console.log(detail);
+        this.targetLesionIndex--;
+        this.newPatient = {
+            ...this.newPatient, 
+            targetLesions: this.newPatient.targetLesions.filter(lesion => lesion.id != detail)
+        }
+    }
+
+    deleteNonTargetLesion({detail}) {
+        console.log("deleteNonTargetLesion");
+        console.log(detail);
+        this.nonTargetLesionIndex--;
+        this.newPatient = {
+            ...this.newPatient, 
+            nonTargetLesions: this.newPatient.nonTargetLesions.filter(lesion => lesion.id != detail)
+        }
+    }
+
+    deleteLesions({detail}) {
+        console.log("deleteLesions");
+        this.newPatient = {
+            ...this.newPatient, 
+            targetLesions: [],
+            nonTargetLesions: []
+        }
+    }
+
+    addNotification({detail}) {
+        this._notifications = [...this._notifications, detail];
+        setTimeout(() => {this._notifications = this._notifications.filter((notification) => notification != detail)}, 5000);
+    }
 
     toggleCreateView() {
         this.createView = !this.createView;
@@ -36,6 +114,9 @@ class App extends LitElement {
     openModalView() {
         if(!this.researchs)
             this.getResearchs();
+        this.newpatient = {};
+        this.targetLesionIndex = 1
+        this.nonTargetLesionIndex = 1
         this.openModal = true;
     }
 
@@ -76,10 +157,11 @@ class App extends LitElement {
 
     render() {
         return html`
-            <kor-page flat="true" scrollable="true">
+            <kor-page flat="true" scrollable="true" flex-direction="column">
                 <kor-app-bar slot="top" label="App" logo="http://pngimg.com/uploads/microsoft/microsoft_PNG13.png">
-                    <kor-button slot="functions" label="Add Patient" @click=${() => this.openModalView()} style="display: flex; align-items: center;"></kor-button>
+                    <kor-button slot="functions" label="Add Patient" @click=${() => this.openModalView()} ?disabled=${this.createView} style="display: flex; align-items: center;"></kor-button>
                 </kor-app-bar>
+                <app-notifications .notifications=${this._notifications} style="max-width: 1024px; width: 100%; margin: 0 auto;"></app-notifications>
                 ${ !this.createView ? html `
                         ${this.renderPatient()}
                     ` : html `

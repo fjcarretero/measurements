@@ -17,18 +17,19 @@ CREATE TABLE IF NOT EXISTS PATIENTS (
 CREATE TABLE IF NOT EXISTS LESIONS (
    id_lesion VARCHAR(10),
    id_patient VARCHAR(11),
+   id_individualStudy VARCHAR(11),
    id_research INT(11),
    type VARCHAR(3),
    localization VARCHAR(20),
    verbatim VARCHAR(20),
    lymphNode VARCHAR(3),
    basal VARCHAR(5),
-   CONSTRAINT LESIONS_PK PRIMARY KEY (id_patient, id_lesion)
+   CONSTRAINT LESIONS_PK PRIMARY KEY (id_individualStudy, id_lesion)
 );
 
 CREATE TABLE IF NOT EXISTS MEASUREMENTS (
    id_measurement INT(11),
-   id_patient VARCHAR(11),
+   id_individualStudy VARCHAR(11),
    date DATE,
    id_research INT(11),
    new_lesions VARCHAR(3),
@@ -36,7 +37,7 @@ CREATE TABLE IF NOT EXISTS MEASUREMENTS (
    created_at TIMESTAMP,
    record_hash VARCHAR(100),
    unique(id_patient, date),
-   --CONSTRAINT MEASUREMENTS_PK PRIMARY KEY (id_measurement)
+   CONSTRAINT MEASUREMENTS_PK PRIMARY KEY (id_measurement)
 );
 
 CREATE TABLE IF NOT EXISTS LESIONS_MEASUREMENTS (
@@ -46,7 +47,7 @@ CREATE TABLE IF NOT EXISTS LESIONS_MEASUREMENTS (
    created_by VARCHAR(20),
    created_at TIMESTAMP,
    record_hash VARCHAR(100),
-   --CONSTRAINT LESIONS_MEASUREMENTS_PK PRIMARY KEY (id_measurement, id_lesion)
+   CONSTRAINT LESIONS_MEASUREMENTS_PK PRIMARY KEY (id_measurement, id_lesion)
 );
 
 CREATE TABLE IF NOT EXISTS USERS (

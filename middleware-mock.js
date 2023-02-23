@@ -11,15 +11,16 @@ module.exports = (req, res, next) => {
         if (req.url.includes("measurements") &&req.method == "GET" && !passed) {
             passed = true;
             let bodyJSON = JSON.parse(body)
-            if (bodyJSON[0]?.patientId) {
-                let patientId = bodyJSON[0].patientId
-        
-                let patientData = db.patients.filter(patient => patient.id == patientId)[0];
+            if (bodyJSON[0]?.individualStudyId) {
+                let individualStudyId = bodyJSON[0].individualStudyId
+                console.log(individualStudyId)
+                let patientData = db.individualStudies.filter(individualStudy => individualStudy.id == individualStudyId)[0];
+                console.log(patientData)
                 bodyJSON = calculus.includeCalculus(bodyJSON, patientData);
             }
             //console.log("paso por aqui");
             send.call(this, bodyJSON);
-        } else if (req.url.includes("patients") &&req.method == "GET" && !passed) {
+        } else if (req.url.includes("individualStudies") &&req.method == "GET" && !passed) {
             passed = true;
             let bodyJSON1 = JSON.parse(body)
             let bodyJSON = calculus.includeSumDiametersBasal(bodyJSON1, db);

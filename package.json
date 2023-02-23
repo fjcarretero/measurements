@@ -7,7 +7,7 @@
   "scripts": {
     "start": "nodemon bin/www",
     "dev": "concurrently \"json-server --watch mock-db.json --middlewares middleware-mock.js --routes mock-routes.json --port 9000\" \"npm run --prefix web dev\"",
-    "build": "cd ./public & gulp.js"
+    "buildweb": "cd ./web; npm run build"
   },
   "dependencies": {
     "body-parser": "^1.19.0",

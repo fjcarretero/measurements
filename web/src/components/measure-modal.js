@@ -136,6 +136,10 @@ class MeasureModal extends LitElement {
     }
 
     saveMeasure () {
+        console.log('this.newMeasure.date')
+        console.log(convert2Date(this.newMeasure.date))
+        console.log('this.lastDateMeasurement')
+        console.log(this.lastDateMeasurement)
         if(this.validateForm()){
             if (convert2Date(this.newMeasure.date) <= this.lastDateMeasurement) {
                 this._dateBeforeLatest = true;

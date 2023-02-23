@@ -14,8 +14,8 @@ exports.includeSumDiametersBasal = function(bodyJSON) {
 
 exports.includeCalculus = (bodyJSON, patientData) => {
             
-    if (bodyJSON[0]?.patientId) {
-        let patientId = bodyJSON[0].patientId
+    if (bodyJSON[0]?.individualStudyId) {
+        let patientId = bodyJSON[0].individualStudyId
 
         let bodyJSONSorted = [...bodyJSON];
 

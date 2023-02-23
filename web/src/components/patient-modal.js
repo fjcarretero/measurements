@@ -75,7 +75,7 @@ class PatientModal extends LitElement {
     changeValueId(){
         return ({target}) => {
             //console.log(target);
-            this.newPatient.id = target.value.length > 20 ? target.value.substring(0,20) : target.value;
+            this.newPatient.patientId = target.value.length > 20 ? target.value.substring(0,20) : target.value;
             //console.log(this.newPatient.id);
             return target;
         }
@@ -83,8 +83,8 @@ class PatientModal extends LitElement {
 
     changeValueResearch(){
         return ({target}) => {   
-            this.newPatient.researchName = target.value;
-            this.newPatient.research = this.researchs.filter(research => research.name==target.value)[0].id;
+            this.newPatient.study = target.value;
+            this.newPatient.studyId = this.researchs.filter(research => research.name==target.value)[0].id;
             return target
         }
     }
@@ -113,7 +113,7 @@ class PatientModal extends LitElement {
     };
 
     validatePatientId() {
-        if (!this.newPatient.id) { 
+        if (!this.newPatient.patientId) { 
             this._patientIdStatus =  "error";
             return false;
         } else {
@@ -123,7 +123,7 @@ class PatientModal extends LitElement {
     }
 
     validateResearch() {
-        if (!this.newPatient.research) { 
+        if (!this.newPatient.study) { 
             this._researchStatus =  "error";
             return false;
         } else {

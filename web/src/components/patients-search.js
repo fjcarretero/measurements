@@ -45,10 +45,10 @@ class PatientsSearch extends LitElement {
         return !this.patients ? html``: this.patients.map(patient => html`
             <kor-card flex-direction="row" @click=${() => this.dispatchPatientSelected(patient)}>
                     <kor-text>PatientId: </kor-text>
-                    <kor-text>${patient.id}</kor-text>
+                    <kor-text>${patient.patientId}</kor-text>
  
-                    <kor-text>Project: </kor-text>
-                    <kor-text>${patient.research}</kor-text>
+                    <kor-text>Study: </kor-text>
+                    <kor-text>${patient.study}</kor-text>
             </kor-card>
         `
         );
