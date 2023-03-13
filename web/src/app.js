@@ -15,6 +15,7 @@ class App extends LitElement {
         patient: {},
         createView: {},
         researchs: {type: Array},
+        role: {},
         openModal: {state: true},
         targetLesionIndex: {state: true},
         nonTargetLesionIndex:{state: true},
@@ -108,7 +109,9 @@ class App extends LitElement {
     }
 
     async getResearchs() {
-        this.researchs = await this.patientsDataProvider.getResearchs();
+        let response = await this.patientsDataProvider.getResearchs();
+        this.researchs = await response.json();
+        this.role = response.headers.get('x-role');
     }
 
     openModalView() {
@@ -176,7 +179,7 @@ class App extends LitElement {
 
     renderPatient(){
         return this.patient ? html`
-            <app-patient-detail @back=${this.backListener} .patientId=${this.patient.id} style="max-width: 1024px; width: 100%; margin: 0 auto;"></app-patients-detail>
+            <app-patient-detail @back=${this.backListener} .patientId=${this.patient.id} .userRole=${this.role} style="max-width: 1024px; width: 100%; margin: 0 auto;"></app-patients-detail>
         `: html`
             <app-patients-search @patientSelected=${this.patientSelectedListener} .researchs=${this.researchs} style="max-width: 1024px; width: 100%; margin: 0 auto;"></app-patients-search>
         `;

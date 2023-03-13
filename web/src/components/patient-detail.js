@@ -15,7 +15,10 @@ class PatientDetail extends LitElement {
         measurements: {},
         addMeasureModal: {},
         newMeasure: {},
-        expanded: {}
+        expanded: {},
+        userRole: {},
+        _label: {state: true},
+        _buttonLabel: {state: true}
     };
     
     constructor() {
@@ -33,11 +36,21 @@ class PatientDetail extends LitElement {
     }
 
     openAddMeasure(){
+        this._label = "Add Measure";
+        this._buttonLabel = "Add";
         this.addMeasureModal = true;
         this.newMeasure = {
             date: null,
             data: {}
         };
+    }
+
+    openModifyMeasure({detail}){
+        console.log("openModifyMeasure")
+        this._label = "Modify Measure";
+        this._buttonLabel = "Modify";
+        this.addMeasureModal = true;
+        this.newMeasure = detail;
     }
 
     closeAddMeasure(){
@@ -76,8 +89,8 @@ class PatientDetail extends LitElement {
                     <kor-tab-item label="RECIST" active></kor-tab-item>
                 </kor-tabs>
                 <kor-card flex-direction="row" flat>
-                    <app-lesions .patient=${this.patient}></app-lesions>
-                    <app-measurements .expanded=${this.expanded} .patient=${this.patient} .measurements=${this.measurements}></app-measurements>
+                    <app-lesions .userRole=${this.userRole} .patient=${this.patient}></app-lesions>
+                    <app-measurements @modify-measurement=${this.openModifyMeasure} .userRole=${this.userRole} .expanded=${this.expanded} .patient=${this.patient} .measurements=${this.measurements}></app-measurements>
                 </kor-card>
                 ${this.renderModal()}  
                 <kor-button slot="footer" label="Add Measure" @click=${() => this.openAddMeasure()}></kor-button>
@@ -86,18 +99,9 @@ class PatientDetail extends LitElement {
         `;
     };
 
-    renderTable(){
-        return !this.patient ? html``: html`
-            <app-target-lesions .label="${'Target lesions'}" .lesions=${this.patient.targetLesions} .measurements=${this.measurements} .sumDiametersBasal=${this.patient.sumDiametersBasal}></app-target-lesions>
-            <app-non-target-lesions .label="${'Non-target lesions'}" .lesions=${this.patient.nonTargetLesions} .measurements=${this.measurements}></app-non-target-lesions>
-            <app-new-lesions .measurements=${this.measurements}></app-new-lesions>
-            <app-overall-response .measurements=${this.measurements}></app-overall-response>
-        `;
-    };
-
     renderModal(){
         return  !this.addMeasureModal ? html``: html`
-            <app-measure-modal @measure-closed=${this.closeAddMeasure} @measure-created=${this.saveMeasure} .patient=${this.patient} .newMeasure=${this.newMeasure} .lastDateMeasurement=${Math.max(...this.measurements.map(m => convert2Date(m.date)))}></app-measure-modal>
+            <app-measure-modal @measure-closed=${this.closeAddMeasure} @measure-created=${this.saveMeasure} .patient=${this.patient} .newMeasure=${this.newMeasure} .lastDateMeasurement=${Math.max(...this.measurements.map(m => convert2Date(m.date)))} .label=${this._label} .buttonLabel=${this._buttonLabel}></app-measure-modal>
         `;
     }
 }

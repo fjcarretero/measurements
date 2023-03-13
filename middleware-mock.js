@@ -4,6 +4,8 @@ module.exports = (req, res, next) => {
     var send = res.send;
     var passed = false;
     console.log("calulus");
+    res.header('x-role', 'admin')
+    //res.header('x-role', 'user')
     res.send = function (body) { // It might be a little tricky here, because send supports a variety of arguments, and you have to make sure you support all of them!
         // Do something with the body...
         console.log(req.url);

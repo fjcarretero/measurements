@@ -11,6 +11,7 @@ class Lesions extends LitElement {
         layout: {},
         tableSize: {},
         expanded: {},
+        userRole: {},
         create: {type: Boolean}
     };
 
@@ -22,10 +23,10 @@ class Lesions extends LitElement {
         console.log("render lesions")
         console.log(this.patient.targetLesions)
         return !this.patient ? html`` : html`
-            <app-target-lesions .label="${'Target lesions'}" .lesions=${this.patient.targetLesions} .sumDiametersBasal=${this.patient.sumDiametersBasal} ?create=${this.create} .status=${this.targetLesionsStatus} .date=${this.patient.date}>
+            <app-target-lesions .userRole=${this.userRole} .label="${'Target lesions'}" .lesions=${this.patient.targetLesions} .sumDiametersBasal=${this.patient.sumDiametersBasal} ?create=${this.create} .status=${this.targetLesionsStatus} .date=${this.patient.date}>
             </app-target-lesions>
             <p></p>
-            <app-non-target-lesions .label="${'Non-target lesions'}" .lesions=${this.patient.nonTargetLesions} ?create=${this.create} .date=${this.patient.date}></app-non-target-lesions>
+            <app-non-target-lesions .userRole=${this.userRole} .label="${'Non-target lesions'}" .lesions=${this.patient.nonTargetLesions} ?create=${this.create} .date=${this.patient.date}></app-non-target-lesions>
             ${!this.create ? html`
                 <kor-table condensed columns="1fr 2fr 1fr 2fr 1fr" style="flex: 1 1 0;">
                     <kor-table-row>

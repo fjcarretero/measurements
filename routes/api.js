@@ -2,8 +2,10 @@ const calculus = require('./calculus');
 const db = require('./db');
 
 exports.searchPatients = async function (req, res, next) {
-    const id = req.query.id_like;
-    const research = req.query.research;
+  console.log("hola2")
+  console.log(req.user)  
+  const id = req.query.id_like;
+    const research = req.query.studyId;
 
     //var query = !id ? `select patients.id_patient as id_patient, researches.name as research, DATE_FORMAT(patients.date, '%d-%m-%Y') as date_formatted from CRO.PATIENTS patients, CRO.RESEARCHES researches where patients.id_research = researches.id_research` : `select patients.id_patient as id_patient, patients.id_research, researches.name as research, DATE_FORMAT(patients.date, '%d-%m-%Y') as date_formatted from CRO.PATIENTS patients, CRO.RESEARCHES researches where patients.id_research = researches.id_research and id_patient like '${id}%'`
     var query = `select patients.id_patient as id_patient, researches.name as research, researches.id_research as id_research, DATE_FORMAT(patients.date, '%d-%m-%Y') as date_formatted from CRO.PATIENTS patients, CRO.RESEARCHES researches where patients.id_research = researches.id_research`;
@@ -25,6 +27,7 @@ exports.searchPatients = async function (req, res, next) {
             })
         }
         res.json(patients);
+        next()
     } catch (err) {
         next(err);
     } finally {
@@ -34,6 +37,8 @@ exports.searchPatients = async function (req, res, next) {
 }
 
 exports.getResearches = async function (req, res, next) {
+    console.log("hola")
+    console.log(req.user)
     let conn;
     try {
         var researches = [];
@@ -46,6 +51,7 @@ exports.getResearches = async function (req, res, next) {
             })
         }
         res.json(researches);
+        next()
     } catch (err) {
       console.log(err)
       if (err.code === 'ER_DUP_ENTRY'){

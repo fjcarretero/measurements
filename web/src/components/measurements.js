@@ -11,8 +11,22 @@ class Measurements extends LitElement {
         measurements: {},
         layout: {},
         tableSize: {},
-        expanded: {}
+        expanded: {},
+        userRole: {}
     };
+
+    modifyMeasurement(measurement){
+        console.log(measurement);
+        this.dispatchEvent(new CustomEvent('modify-measurement', {
+            detail: measurement,
+            bubbles: true,
+            composed: true,
+        }));
+    }
+
+    deleteMeasurement(measurement){
+        console.log(measurement);
+    }
 
     static styles = css`
         :host {
@@ -47,7 +61,14 @@ class Measurements extends LitElement {
     renderMeasurements() {
         return !this.measurements ? html`` : this.measurements.map(measurement => html`
             <kor-card flat>
-                <p style="font: var(--header-2);"></p>
+                ${this.userRole != "admin" ? html`
+                    <p style="font: var(--header-2);"></p>`
+                : html `
+                    <kor-card flat flex-direction="row" style="align-self: center;">
+                        <kor-icon button @click=${()=> this.deleteMeasurement(measurement)} size="s" icon="delete" style="height: 28px; align-self: center;"></kor-icon>
+                        <kor-icon button @click=${()=> this.modifyMeasurement(measurement)} size="s" icon="edit" style="height: 28px; align-self: center;"></kor-icon>
+                    </kor-card>` 
+                }
                 <app-measurement-target .expanded=${this.expanded} .rows=${this.patient.targetLesions} .measurement=${measurement}></app-measurement-target>
                 <p style="font-size: 15px;"></p>
                 <app-measurement-non-target .rows=${this.patient.nonTargetLesions} .measurement=${measurement}>

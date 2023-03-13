@@ -8,6 +8,8 @@ class MeasureModal extends LitElement {
         patient: {},
         newMeasure: {},
         lastDateMeasurement: {},
+        label: {},
+        buttonLabel: {},
         _targetLesionsDisabled: {},
         _targetLesionsBackup: {},
         _dateStatus: {state: true},
@@ -158,7 +160,11 @@ class MeasureModal extends LitElement {
     }
 
     closeMeasure () {
-        this._showAlert = true;
+        if (this.buttonLabel == "Add") {
+            this._showAlert = true;
+        } else {
+            this.dispatchContinueAlert();
+        }
     }
 
     dispatchCancelAlert () {
@@ -192,8 +198,8 @@ class MeasureModal extends LitElement {
 
     render() {
         return html`
-            <kor-modal id="addMeasure" visible sticky label="Add Measure" height="1000">
-                <kor-input tabindex="1" @value-changed=${this.changeValue(null,  "date")} label="Date" autofocus="true" type="date" .status=${this._dateStatus}></kor-input>
+            <kor-modal id="addMeasure" visible sticky label=${this.label} height="1000">
+                <kor-input tabindex="1" @value-changed=${this.changeValue(null,  "date")} label="Date" autofocus="true" type="date" .status=${this._dateStatus} .value=${this.newMeasure.date}></kor-input>
                 <kor-card style="flex-wrap;" flat label="Target Lesions" flat flex-direction="column">
                     ${this.renderTargetLocations()}
                 </kor-card>
@@ -203,15 +209,15 @@ class MeasureModal extends LitElement {
                 <kor-card style="flex-wrap;" flat flex-direction="row">
                     <kor-text style="flex: 4 1;">New Lesions</kor-text>
                     <kor-switch style="flex: 1 1;">
-                        <kor-switch-item @active-changed=${this.setLesionsValue("NO")} label="NO"></kor-switch-item>
-                        <kor-switch-item @active-changed=${this.setLesionsValue("YES")} label="YES"></kor-switch-item>
+                        <kor-switch-item @active-changed=${this.setLesionsValue("NO")} label="NO" ?active=${this.newMeasure.data.newLesions == "NO"}></kor-switch-item>
+                        <kor-switch-item @active-changed=${this.setLesionsValue("YES")} label="YES" ?active=${this.newMeasure.data.newLesions == "YES"}></kor-switch-item>
                     </kor-switch>
                     ${this._newLesionsStatus ? html`
                         <kor-badge .status=${this._newLesionsStatus}></kor-badge>` 
                     : ''}
                 </kor-card>
                 <kor-button slot="footer" color="secondary" label="Close" @click=${() => this.closeMeasure()}></kor-button>
-                <kor-button slot="footer" color="primary" label="Add" @click=${() => this.saveMeasure()}></kor-button>
+                <kor-button slot="footer" color="primary" label=${this.buttonLabel} @click=${() => this.saveMeasure()}></kor-button>
             </kor-modal>
             ${!this._showAlert ? html `` : html `
                 <app-alert-modal message="If you go back, you will lose your data for this register. Do you want to continue?" @alert-cancelled=${() => this.dispatchCancelAlert()} @alert-continued=${() => this.dispatchContinueAlert()} ></app-alert-modal>
@@ -225,7 +231,7 @@ class MeasureModal extends LitElement {
     renderTargetLocations(){
         return !this.patient.targetLesions  ? html``: Object.keys(this.patient.targetLesions).map((lesion, index) => html`
             <kor-card style="flex-wrap;" flat flex-direction="row">
-                <kor-input min=0 .disabled=${this._targetLesionsDisabled[this.patient.targetLesions[lesion].id]} style="flex: 2 1;" tabindex="${1+index}" id=${this.patient.targetLesions[lesion].id} @value-changed=${this.changeValue("data", this.patient.targetLesions[lesion].id)} label="${this.patient.targetLesions[lesion].localization}" type="number"></kor-input>
+                <kor-input min=0 .disabled=${this._targetLesionsDisabled[this.patient.targetLesions[lesion].id]} style="flex: 2 1;" tabindex="${1+index}" id=${this.patient.targetLesions[lesion].id} @value-changed=${this.changeValue("data", this.patient.targetLesions[lesion].id)} label="${this.patient.targetLesions[lesion].localization}" type="number" .value=${this.newMeasure.data[this.patient.targetLesions[lesion].id]}></kor-input>
                 <kor-tool toggle @active-changed=${() => this.toggleNE(this.patient.targetLesions[lesion].id)} label="NE"></kor-tool>
                 ${this._targetLesionsStatus[this.patient.targetLesions[lesion].id] ? html`
                     <kor-badge .status=${this._targetLesionsStatus[this.patient.targetLesions[lesion].id]}></kor-badge>` 
@@ -239,10 +245,10 @@ class MeasureModal extends LitElement {
             <kor-card style="flex-wrap;" flat flex-direction="row">
                 <kor-text style="flex: 1 1;">${this.patient.nonTargetLesions[lesion].localization}</kor-text>
                 <kor-switch style="flex: 1 1;"> 
-                    <kor-switch-item @active-changed=${this.setValue("UI", this.patient.nonTargetLesions[lesion].id)} label="UI"></kor-switch-item>
-                    <kor-switch-item @active-changed=${this.setValue("UC", this.patient.nonTargetLesions[lesion].id)} label="UC"></kor-switch-item>
-                    <kor-switch-item @active-changed=${this.setValue("ABS", this.patient.nonTargetLesions[lesion].id)} label="ABS"></kor-switch-item>
-                    <kor-switch-item @active-changed=${this.setValue("NE", this.patient.nonTargetLesions[lesion].id)} label="NE"></kor-switch-item>
+                    <kor-switch-item @active-changed=${this.setValue("UI", this.patient.nonTargetLesions[lesion].id)} label="UI" ?active=${this.newMeasure.data[this.patient.nonTargetLesions[lesion].id] == "UI"}></kor-switch-item>
+                    <kor-switch-item @active-changed=${this.setValue("UC", this.patient.nonTargetLesions[lesion].id)} label="UC" ?active=${this.newMeasure.data[this.patient.nonTargetLesions[lesion].id] == "UC"}></kor-switch-item>
+                    <kor-switch-item @active-changed=${this.setValue("ABS", this.patient.nonTargetLesions[lesion].id)} label="ABS" ?active=${this.newMeasure.data[this.patient.nonTargetLesions[lesion].id] == "ABS"}></kor-switch-item>
+                    <kor-switch-item @active-changed=${this.setValue("NE", this.patient.nonTargetLesions[lesion].id)} label="NE" ?active=${this.newMeasure.data[this.patient.nonTargetLesions[lesion].id] == "NE"}></kor-switch-item>
                 </kor-switch>
                 ${this._nonTargetLesionsStatus[this.patient.nonTargetLesions[lesion].id] ? html`
                     <kor-badge .status=${this._nonTargetLesionsStatus[this.patient.nonTargetLesions[lesion].id]}></kor-badge>` 

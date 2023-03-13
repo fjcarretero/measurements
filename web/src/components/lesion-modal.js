@@ -7,6 +7,8 @@ class LesionModal extends LitElement {
         newLesion: {},
         prefix: {},
         lesionLocations: {type: Array},
+        label: {},
+        buttonLabel: {},
         _localizationStatus: {state: true},
         _verbatimStatus: {state: true},
         _lymphNodeStatus: {state: true},
@@ -196,26 +198,26 @@ class LesionModal extends LitElement {
     render() {
         //this.initVariables()
         return html`
-            <kor-modal id="addLesion" visible sticky label="Add Lesion" height="1000">
-                <kor-input tabindex="1" @value-changed=${this.changeValueLocation()} label="Location" autofocus="true" type="select" .status=${this._localizationStatus}>
+            <kor-modal id="addLesion" visible sticky label=${this.label} height="1000">
+                <kor-input tabindex="1" @value-changed=${this.changeValueLocation()} label="Location" autofocus="true" type="select" .status=${this._localizationStatus} .value=${this.newLesion?.localization}>
                     ${!this.lesionLocations ? html ``: this.lesionLocations.map(lesionLocation => html `
                         <kor-menu-item label="${lesionLocation}"></kor-menu-item>
                     `)}
                 </kor-input>
-                <kor-input tabindex="2" @value-changed=${this.changeValueVerbatim()} label="Verbatim" autofocus="true" .status=${this._verbatimStatus}></kor-input>
+                <kor-input tabindex="2" @value-changed=${this.changeValueVerbatim()} label="Verbatim" autofocus="true" .status=${this._verbatimStatus} .value=${this.newLesion?.verbatim}></kor-input>
                 ${this.prefix == "target" ? html`
-                    <kor-input tabindex="4" @value-changed=${this.changeValue("basal")} label="Basal" autofocus="true" type="Number" .status=${this._basalStatus}></kor-input>` :
+                    <kor-input tabindex="4" @value-changed=${this.changeValue("basal")} label="Basal" autofocus="true" type="Number" .status=${this._basalStatus} .value=${this.newLesion?.basal}></kor-input>` :
                 html`
                     <kor-card style="flex-wrap;" flat flex-direction="row">
                         <kor-text style="flex: 3 1; padding: var(--spacing-s);">Basal</kor-text>
-                        <kor-tool style="flex: 1 1;" @active-changed=${() => this.toggleBasal()} label="PRESENT" toggle></kor-tool>
+                        <kor-tool style="flex: 1 1;" @active-changed=${() => this.toggleBasal()} label="PRESENT" toggle ?active=${this.newLesion.basal == "PRE"}></kor-tool>
                         ${this._basalStatus ? html`
                             <kor-badge .status=${this._basalStatus}></kor-badge>` 
                         : ''}
                     </kor-card>
                 `}
                 <kor-button slot="footer" color="secondary" label="Close" @click=${() => this.dispatchCloseLesion()}></kor-button>
-                <kor-button slot="footer" color="primary" label="Add" @click=${() => this.dispatchSaveLesion()}></kor-button>
+                <kor-button slot="footer" color="primary" label=${this.buttonLabel} @click=${() => this.dispatchSaveLesion()}></kor-button>
             </kor-modal>
             ${!this._showAlert ? html `` : html `
                 <app-alert-modal message="If you go back, you will lose your data for this register. Do you want to continue?" @alert-cancelled=${() => this.dispatchCancelAlert()} @alert-continued=${() => this.dispatchContinueAlert()} ></app-alert-modal>
