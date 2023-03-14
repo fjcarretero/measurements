@@ -70,7 +70,6 @@ app.use(express.static(__dirname + '/public'));
 app.use(authController.isAuthenticated);
 
 app.use((req, res, next) => {
-  console.log("x-role")
   res.set('x-role', req.user.role);
   next()
 });
@@ -78,8 +77,12 @@ app.use((req, res, next) => {
 app.get('/api/individualStudies/:id', authController.isAuthenticated, api.getPatientById);
 app.get('/api/individualStudies', api.searchPatients);
 app.post('/api/individualStudies', authController.isAuthenticated, api.addPatient);
+app.put('/api/individualStudies/:id/targetLesions/:lesionId', authController.isAuthenticated, api.modifyTargetLesion);
+app.put('/api/individualStudies/:id/nonTargetLesions/:lesionId', authController.isAuthenticated, api.modifyNonTargetLesion);
 app.get('/api/individualStudies/:id/measurements', authController.isAuthenticated, api.getMeasurementsByPatientId);
 app.post('/api/individualStudies/:id/measurements', authController.isAuthenticated, api.addMeasurementsByPatientId);
+app.put('/api/individualStudies/:id/measurements/:measurementId', authController.isAuthenticated, api.modifyMeasurementsByPatientId);
+app.delete('/api/individualStudies/:id/measurements/:measurementId', authController.isAuthenticated, api.deleteMeasurementsByPatientId);
 app.get('/api/studies', api.getResearches);
 
 app.use((error, req, res, next) => {

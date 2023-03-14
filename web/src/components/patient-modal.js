@@ -186,7 +186,7 @@ class PatientModal extends LitElement {
         return html`
             <kor-modal id="addLesion" visible sticky label="Add Patient" height="1000">
                 <kor-input tabindex="1" @value-changed=${this.changeValueId()} label="PatientId" autofocus="true" type="text" .status=${this._patientIdStatus}></kor-input>
-                <kor-input tabindex="2" @value-changed=${this.changeValueResearch()} label="Project" autofocus="true" type="select" .status=${this._researchStatus}>
+                <kor-input tabindex="2" @value-changed=${this.changeValueResearch()} label="Study" autofocus="true" type="select" .status=${this._researchStatus}>
                     ${!this.researchs ? html`` : this.researchs.map(research => html`
                         <kor-menu-item label=${research.name}></kor-menu-item>`
                     )}

@@ -1,7 +1,6 @@
 import '@kor-ui/kor';
 import {html, LitElement} from 'lit';
 import {PatientsDataProvider} from './patients-data-provider.js';
-import './components/home.js';
 import './components/patient-create.js';
 import './components/patient-modal.js';
 import './components/patient-detail.js';
@@ -37,6 +36,8 @@ class App extends LitElement {
         this.addEventListener('target-lesion-deleted', this.deleteTargetLesion);
         this.addEventListener('non-target-lesion-deleted', this.deleteNonTargetLesion);
         this.addEventListener('patient-lesions-deleted', this.deleteLesions);
+        this.addEventListener('target-lesion-modified', this.modifyTargetLesion);
+        this.addEventListener('non-target-lesion-modified', this.modifyNonTargetLesion);
     };
 
     disconnectedCallback(){
@@ -97,6 +98,20 @@ class App extends LitElement {
             targetLesions: [],
             nonTargetLesions: []
         }
+    }
+
+    async modifyTargetLesion({detail}) {
+        console.log("modifyTargetLesion");
+        console.log(detail);
+        console.log(this.patient.id);
+        let response = await this.patientsDataProvider.modifyTargetLesion(this.patient.id, detail.id, detail);
+        
+        this.patient = [...this.patientsDataProvider.getPatientById(this.patient.id)];
+    }
+
+    modifyNonTargetLesion({detail}) {
+        console.log("modifyNonTargetLesion");
+        console.log(detail);
     }
 
     addNotification({detail}) {

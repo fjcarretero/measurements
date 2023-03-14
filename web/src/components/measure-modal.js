@@ -1,13 +1,13 @@
 import '@kor-ui/kor';
 import { html, LitElement } from 'lit';
-import { convert2Date } from '../utils/utils.js';
+import { convert2Date, convertDateFormat } from '../utils/utils.js';
 import './alert-modal.js';
 
 class MeasureModal extends LitElement {
     static properties = {
         patient: {},
         newMeasure: {},
-        lastDateMeasurement: {},
+        lastDateMeasurement: {type: Date},
         label: {},
         buttonLabel: {},
         _targetLesionsDisabled: {},
@@ -139,21 +139,35 @@ class MeasureModal extends LitElement {
 
     saveMeasure () {
         console.log('this.newMeasure.date')
-        console.log(convert2Date(this.newMeasure.date))
+        console.log(convert2Date(this.newMeasure.date).valueOf())
         console.log('this.lastDateMeasurement')
         console.log(this.lastDateMeasurement)
         if(this.validateForm()){
-            if (convert2Date(this.newMeasure.date) <= this.lastDateMeasurement) {
-                this._dateBeforeLatest = true;
+            if (this.buttonLabel == "Add") {
+                if (convert2Date(this.newMeasure.date) <= this.lastDateMeasurement) {
+                    this._dateBeforeLatest = true;
+                } else {
+                    this.dispatchSaveMeasure();
+                }
             } else {
-                this.dispatchSaveMeasure();
+                this.dispatchModifyMeasure();
             }
         }
     }
 
     dispatchSaveMeasure () {
-        this.dispatchEvent(new CustomEvent('measure-created', {
-            detail: this.newMeasure,
+            this.dispatchEvent(new CustomEvent('measure-created', {
+                detail: this.newMeasure,
+                bubbles: true,
+                composed: true,
+            }));
+    }
+
+    dispatchModifyMeasure () {
+        console.log(this.newMeasure);
+        let pepito = {...this.newMeasure}
+        this.dispatchEvent(new CustomEvent('measure-modified', {
+            detail: pepito,
             bubbles: true,
             composed: true,
         }));

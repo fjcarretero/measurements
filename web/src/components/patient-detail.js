@@ -73,11 +73,22 @@ class PatientDetail extends LitElement {
     }
 
     async saveMeasure({measurement}){
-
         let measure = await this.patientsDataProvider.addMeasurement(this.patientId, this.newMeasure);
-
         this.measurements = await this.patientsDataProvider.getMeasuresByPatientId(this.patientId);
+        this.addMeasureModal = false;
+    }
 
+    modifyMeasureListener({detail}){
+        console.log("modifyMeasureListener");
+        console.log(detail);
+        this.modifyMeasure(detail);
+    }
+
+    async modifyMeasure(measurement){
+        console.log("modifyMeasure");
+        console.log(measurement);
+        let measure = await this.patientsDataProvider.modifyMeasurement(this.patientId, measurement.id, measurement);
+        this.measurements = await this.patientsDataProvider.getMeasuresByPatientId(this.patientId);
         this.addMeasureModal = false;
     }
 
@@ -101,7 +112,7 @@ class PatientDetail extends LitElement {
 
     renderModal(){
         return  !this.addMeasureModal ? html``: html`
-            <app-measure-modal @measure-closed=${this.closeAddMeasure} @measure-created=${this.saveMeasure} .patient=${this.patient} .newMeasure=${this.newMeasure} .lastDateMeasurement=${Math.max(...this.measurements.map(m => convert2Date(m.date)))} .label=${this._label} .buttonLabel=${this._buttonLabel}></app-measure-modal>
+            <app-measure-modal @measure-closed=${this.closeAddMeasure} @measure-created=${this.saveMeasure} @measure-modified=${this.modifyMeasureListener} .patient=${this.patient} .newMeasure=${this.newMeasure} .lastDateMeasurement=${Math.max(...this.measurements.map(m => convert2Date(m.date)))} .label=${this._label} .buttonLabel=${this._buttonLabel}></app-measure-modal>
         `;
     }
 }

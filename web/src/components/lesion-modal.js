@@ -168,12 +168,21 @@ class LesionModal extends LitElement {
 
     dispatchSaveLesion () {
         if(this.validateForm()){
-            this.prefix == "target" ? this.newLesion.id = "tl" : this.newLesion.id = "ntl"
-            this.dispatchEvent(new CustomEvent(this.prefix + '-lesion-added', {
-                detail: this.newLesion,
-                bubbles: true,
-                composed: true,
-            }));
+            if (this.buttonLabel == 'Add') {
+                this.prefix == "target" ? this.newLesion.id = "tl" : this.newLesion.id = "ntl"
+                this.dispatchEvent(new CustomEvent(this.prefix + '-lesion-added', {
+                    detail: this.newLesion,
+                    bubbles: true,
+                    composed: true,
+                }));
+            } else {
+                console.log("colorin colorado")
+                this.dispatchEvent(new CustomEvent(this.prefix + '-lesion-modified', {
+                    detail: this.newLesion,
+                    bubbles: true,
+                    composed: true,
+                }));
+            }
             this.dispatchContinueAlert();
         }
     }

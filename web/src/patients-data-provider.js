@@ -50,6 +50,16 @@ export class PatientsDataProvider {
       });
       return await response.json();
     }
+    async modifyMeasurement(studyPatientId, measurementId, data) {
+      let response = await fetch('/api/individualStudies/' + studyPatientId + '/measurements/' + measurementId, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data)
+      });
+      return await response.json();
+    }
     async getResearchs() {
       let response = await fetch('/api/studies', {
         method: 'GET',
@@ -58,5 +68,25 @@ export class PatientsDataProvider {
         },
       });
       return await response;
+    }
+    async modifyTargetLesion(studyPatientId, lesionId, data) {
+      let response = await fetch('/api/individualStudies/' + studyPatientId + '/targetLesions/' + lesionId, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data)
+      });
+      return await response.json();
+    }
+    async modifyNonTargetLesion(studyPatientId, lesionId, data) {
+      let response = await fetch('/api/individualStudies/' + studyPatientId + '/nonTargetLesions/' + lesionId, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data)
+      });
+      return await response.json();
     }
   }

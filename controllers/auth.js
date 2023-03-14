@@ -23,7 +23,6 @@ const salt = process.env.SALT;
 
 passport.use(new BasicStrategy(
   function(userid, password, done) {
-    console.log("tetet")
     db.pool.getConnection()
       .then(conn => 
         conn.query(`select * from CRO.USERS where id_user=?`, [userid] )
