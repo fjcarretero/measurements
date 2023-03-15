@@ -60,6 +60,15 @@ export class PatientsDataProvider {
       });
       return await response.json();
     }
+    async deleteMeasurement(studyPatientId, measurementId) {
+      let response = await fetch('/api/individualStudies/' + studyPatientId + '/measurements/' + measurementId, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        }
+      });
+      return await response.json();
+    }
     async getResearchs() {
       let response = await fetch('/api/studies', {
         method: 'GET',

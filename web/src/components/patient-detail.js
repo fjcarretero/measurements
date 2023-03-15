@@ -18,7 +18,9 @@ class PatientDetail extends LitElement {
         expanded: {},
         userRole: {},
         _label: {state: true},
-        _buttonLabel: {state: true}
+        _buttonLabel: {state: true},
+        _measurementId: {state: true},
+        _showAlert: {state: true}
     };
     
     constructor() {
@@ -26,6 +28,7 @@ class PatientDetail extends LitElement {
         this.addMeasureModal = false;
         this.patientsDataProvider = new PatientsDataProvider();
         this.addEventListener('expandedChanged', (e) => this.expanded = e.detail);
+        this.addEventListener('delete-measurement', this.deleteMeasureListener);
     };
 
     dispatchBack() {
@@ -92,6 +95,27 @@ class PatientDetail extends LitElement {
         this.addMeasureModal = false;
     }
 
+    async deleteMeasure(){
+        console.log("deleteMeasure");
+        let measure = await this.patientsDataProvider.deleteMeasurement(this.patientId, this._measurementId);
+        this.measurements = await this.patientsDataProvider.getMeasuresByPatientId(this.patientId);
+    }
+
+    deleteMeasureListener({detail}) {
+        console.log("deleteMeasureListener");
+        this._measurementId = detail.id;
+        this._showAlert = true;
+    }
+
+    dispatchContinueAlert() {
+        this.deleteMeasure()
+        this._showAlert = false;
+    }
+
+    dispatchCancelAlert() {
+        this._showAlert = false;
+    }
+
     render(){
         return !this.patient ? html``: html`
             <kor-card flat>
@@ -107,6 +131,9 @@ class PatientDetail extends LitElement {
                 <kor-button slot="footer" label="Add Measure" @click=${() => this.openAddMeasure()}></kor-button>
                 <kor-button slot="footer" label="< Back" @click=${() => this.dispatchBack()}></kor-button>
             </kor-card>
+            ${!this._showAlert ? html `` : html `
+                <app-alert-modal message="Do you want to delete this measure?" @alert-cancelled=${() => this.dispatchCancelAlert()} @alert-continued=${() => this.dispatchContinueAlert()} ></app-alert-modal>
+            `}
         `;
     };
 

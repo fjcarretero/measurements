@@ -4,6 +4,7 @@ import './measurement-target.js';
 import './measurement-non-target.js';
 import './measurement-new-lesions.js';
 import './measurement-overall.js';
+import './alert-modal.js';
 
 class Measurements extends LitElement {
     static properties = {
@@ -12,7 +13,7 @@ class Measurements extends LitElement {
         layout: {},
         tableSize: {},
         expanded: {},
-        userRole: {}
+        userRole: {}    
     };
 
     modifyMeasurement(measurement){
@@ -25,7 +26,11 @@ class Measurements extends LitElement {
     }
 
     deleteMeasurement(measurement){
-        console.log(measurement);
+        this.dispatchEvent(new CustomEvent('delete-measurement', {
+            detail: measurement,
+            bubbles: true,
+            composed: true,
+        }));
     }
 
     static styles = css`

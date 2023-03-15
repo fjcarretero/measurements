@@ -159,7 +159,7 @@ exports.getMeasurementsByPatientId = async function (req, res, next) {
         //const rows = await conn.query(`select id_measurement, id_individualStudy, id_patient, DATE_FORMAT(date, '%d-%m-%Y') as date_formatted, new_lesions, MAX(created_at) from CRO.MEASUREMENTS where id_individualStudy = ? GROUP BY id_measurement ORDER BY date desc `, [id] );
         const rows = await conn.query(`select t.id_measurement, t.id_individualStudy, t.id_patient, DATE_FORMAT(t.date, '%Y-%m-%d') as date_formatted, t.new_lesions FROM (`
           + `SELECT id_measurement, MAX(created_at) as MaxTime FROM CRO.MEASUREMENTS where id_individualStudy = ? GROUP BY id_measurement) r `
-          + `INNER JOIN CRO.MEASUREMENTS t ON t.id_measurement = r.id_measurement AND t.created_at = r.MaxTime AND t.id_individualStudy = ? ORDER BY t.date desc`, [id, id] );
+          + `INNER JOIN CRO.MEASUREMENTS t ON t.id_measurement = r.id_measurement AND t.created_at = r.MaxTime AND t.deleted = 0 AND t.id_individualStudy = ? ORDER BY t.date desc`, [id, id] );
         for (i = 0, len = rows.length; i < len; i++) {
             var measurement = {
               id: rows[i].id_measurement,
@@ -332,12 +332,7 @@ exports.deleteMeasurementsByPatientId = async function (req, res, next) {
     var json = req.body;
     var measurements = [];
     conn = await db.pool.getConnection();
-    const rows = await conn.query(`insert into CRO.MEASUREMENTS (id_measurement, id_individualStudy, id_patient, date, new_lesions, created_by) values (?, ?, ?, ?, ?, ?)`, [measurementId, id, patientId, json.date, json.data.newLesions, req.user.id] );
-    Object.keys(json.data).map(key => {
-      if (key.startsWith('tl') || key.startsWith('ntl')) {
-        conn.query(`insert into CRO.LESIONS_MEASUREMENTS (id_measurement, id_lesion, value, created_by) values (?, ?, ?, ?)`, [measurementId, key, json.data[key], req.user.id])
-      }
-    });
+    const rows = await conn.query(`insert into CRO.MEASUREMENTS (id_measurement, id_individualStudy, id_patient, created_by, deleted) values (?, ?, ?, ?, ?)`, [measurementId, id, patientId, req.user.id, 1] );
         
       //const sum = await db.pool.query(`select sum(basal) as sumBasal from CRO.LESIONS where id_patient = ?`, [id])
       //const lesionRows = await conn.query(`select id_lesion, localization, verbatim, lymphNode, basal, MAX(created_at) from CRO.LESIONS where id_individualStudy = ? and type = 'TL' GROUP BY id_lesion`,[id]);
