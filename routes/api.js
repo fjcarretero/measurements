@@ -395,15 +395,18 @@ exports.modifyTargetLesion = async function (req, res, next) {
 }
 exports.modifyNonTargetLesion = async function (req, res, next) {
   var id_individualStudy = req.params.id;
+  var split = id_individualStudy.split('-')
+  var studyId = split[0]
+  var patientId = split[1]
   var id_lesion = req.params.lesionId;
   let conn;
   try {
-      var json = req.body;
+      var lesion = req.body;
       let type ='NTL'
       conn = await db.pool.getConnection();
-      let rows = await conn.query(`insert into CRO.LESIONS (id_patient, id_lesion, id_individualStudy, id_research, type, localization, verbatim, lymphNode, basal, created_by) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`, [id_individualStudy, id_lesion, json.id, json.studyId, type, lesion.localization, lesion.verbatim, lesion.lymphNode, lesion.basal, req.user.id])
+      let rows = await conn.query(`insert into CRO.LESIONS (id_patient, id_lesion, id_individualStudy, id_research, type, localization, verbatim, lymphNode, basal, created_by) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`, [patientId, id_lesion, id_individualStudy, studyId, type, lesion.localization, lesion.verbatim, lesion.lymphNode, lesion.basal, req.user.id])
 
-      res.status(200).json(json);
+      res.status(200).json(lesion);
   } catch (err) {
       console.log(err)
       if (err.code === 'ER_DUP_ENTRY'){

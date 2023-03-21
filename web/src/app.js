@@ -43,7 +43,7 @@ class App extends LitElement {
     disconnectedCallback(){
         super.disconnectedCallback()
         console.log("disconnectedCallback");
-        this.newpatient = {};
+        this.newPatient = {};
         this.targetLesionIndex = 1
         this.nonTargetLesionIndex = 1
     }
@@ -109,9 +109,12 @@ class App extends LitElement {
         this.patient = [...this.patientsDataProvider.getPatientById(this.patient.id)];
     }
 
-    modifyNonTargetLesion({detail}) {
+    async modifyNonTargetLesion({detail}) {
         console.log("modifyNonTargetLesion");
         console.log(detail);
+        let response = await this.patientsDataProvider.modifyNonTargetLesion(this.patient.id, detail.id, detail);
+        
+        this.patient = [...this.patientsDataProvider.getPatientById(this.patient.id)];
     }
 
     addNotification({detail}) {

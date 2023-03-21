@@ -104,11 +104,17 @@ class LesionModal extends LitElement {
     }
 
     toggleBasal(){
+        console.log("toggle");
         if(!this.newLesion.basal || this.newLesion.basal=="") {
-            this.newLesion.basal = "PRE"
-        } else {
-            this.newLesion.basal = ""
-        }
+                this.newLesion.basal = "PRE"
+            } else {
+                this.newLesion.basal = ""
+            }
+
+    }
+
+    click(){
+        console.log("click")
     }
 
     modifyObject(sourceObject, key, value){
@@ -171,7 +177,7 @@ class LesionModal extends LitElement {
             if (this.buttonLabel == 'Add') {
                 this.prefix == "target" ? this.newLesion.id = "tl" : this.newLesion.id = "ntl"
                 this.dispatchEvent(new CustomEvent(this.prefix + '-lesion-added', {
-                    detail: this.newLesion,
+                    detail: {...this.newLesion},
                     bubbles: true,
                     composed: true,
                 }));
@@ -219,10 +225,11 @@ class LesionModal extends LitElement {
                 html`
                     <kor-card style="flex-wrap;" flat flex-direction="row">
                         <kor-text style="flex: 3 1; padding: var(--spacing-s);">Basal</kor-text>
-                        <kor-tool style="flex: 1 1;" @active-changed=${() => this.toggleBasal()} label="PRESENT" toggle ?active=${this.newLesion.basal == "PRE"}></kor-tool>
+                        <kor-tool style="flex: 1 1;" @click=${() => this.toggleBasal()} label="PRESENT" toggle ?active=${this.newLesion.basal == "PRE"}></kor-tool>
                         ${this._basalStatus ? html`
                             <kor-badge .status=${this._basalStatus}></kor-badge>` 
                         : ''}
+
                     </kor-card>
                 `}
                 <kor-button slot="footer" color="secondary" label="Close" @click=${() => this.dispatchCloseLesion()}></kor-button>

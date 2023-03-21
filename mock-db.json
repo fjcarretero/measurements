@@ -193,6 +193,31 @@
       ],
       "nonTargetLesions": [],
       "id": "1-33"
+    },
+    {
+      "patientId": "333",
+      "study": "study1",
+      "studyId": 1,
+      "date": "1999-01-01",
+      "targetLesions": [
+        {
+          "localization": "BRAIN",
+          "lymphNode": "NO",
+          "basal": "12",
+          "verbatim": "",
+          "id": "tl1"
+        }
+      ],
+      "nonTargetLesions": [
+        {
+          "localization": "LEPTOMENINGEAL DISEASE",
+          "lymphNode": "NO",
+          "basal": "PRE",
+          "verbatim": "",
+          "id": "ntl1"
+        }
+      ],
+      "id": "1-333"
     }
   ],
   "measurements": [
