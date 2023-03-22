@@ -29,6 +29,8 @@ class PatientDetail extends LitElement {
         this.patientsDataProvider = new PatientsDataProvider();
         this.addEventListener('expandedChanged', (e) => this.expanded = e.detail);
         this.addEventListener('delete-measurement', this.deleteMeasureListener);
+        this.addEventListener('target-lesion-modified', this.modifyTargetLesion);
+        this.addEventListener('non-target-lesion-modified', this.modifyNonTargetLesion);
     };
 
     dispatchBack() {
@@ -60,11 +62,34 @@ class PatientDetail extends LitElement {
         this.addMeasureModal = false;
     }
 
+    async modifyTargetLesion({detail}) {
+        console.log("modifyTargetLesion");
+        console.log(detail);
+        console.log(this.patientId);
+        let response = await this.patientsDataProvider.modifyTargetLesion(this.patientId, detail.id, detail);
+        this.patient = await this.patientsDataProvider.getPatientById(this.patientId);
+    }
+
+    async modifyNonTargetLesion({detail}) {
+        console.log("modifyNonTargetLesion");
+        console.log(detail);
+        let response = await this.patientsDataProvider.modifyNonTargetLesion(this.patientId, detail.id, detail);
+        this.patient = await this.patientsDataProvider.getPatientById(this.patientId);
+    }
+
     async update(changed) {
         super.update(changed);
+        console.log("details changed");
+        console.log(changed);
         if (changed.has('patientId')) {
-            this.patient = await this.patientsDataProvider.getPatientById(this.patientId);
-            this.measurements = await this.patientsDataProvider.getMeasuresByPatientId(this.patientId);
+            let id = this.patientId;
+            console.log("patientId");
+            console.log(id);
+            if (id) {
+                console.log("refresh");
+                this.patient = await this.patientsDataProvider.getPatientById(id);
+                this.measurements = await this.patientsDataProvider.getMeasuresByPatientId(id);
+            }
         }
     }
 

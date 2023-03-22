@@ -12,9 +12,9 @@ class Notifications extends LitElement {
 
     render() {
         return html `
-            <kor-card flat="true" flex-direction="row">
+            <kor-card flat="false" flex-direction="row">
                 ${this.notifications.map(notification => html `
-                    <kor-badge .status=${notification.status}></kor-badge>
+                    <<kor-badge size="L" .status=${notification.status}></kor-badge>
                     <kor-text size="header-1">${notification.message}</kor-text>
                 `)}
             </kor-card>

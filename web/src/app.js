@@ -36,8 +36,9 @@ class App extends LitElement {
         this.addEventListener('target-lesion-deleted', this.deleteTargetLesion);
         this.addEventListener('non-target-lesion-deleted', this.deleteNonTargetLesion);
         this.addEventListener('patient-lesions-deleted', this.deleteLesions);
-        this.addEventListener('target-lesion-modified', this.modifyTargetLesion);
-        this.addEventListener('non-target-lesion-modified', this.modifyNonTargetLesion);
+        //this.addEventListener('target-lesion-modified', this.modifyTargetLesion);
+        //this.addEventListener('non-target-lesion-modified', this.modifyNonTargetLesion);
+
     };
 
     disconnectedCallback(){
@@ -100,22 +101,23 @@ class App extends LitElement {
         }
     }
 
-    async modifyTargetLesion({detail}) {
-        console.log("modifyTargetLesion");
-        console.log(detail);
-        console.log(this.patient.id);
-        let response = await this.patientsDataProvider.modifyTargetLesion(this.patient.id, detail.id, detail);
-        
-        this.patient = [...this.patientsDataProvider.getPatientById(this.patient.id)];
-    }
+    // async modifyTargetLesion({detail}) {
+    //     console.log("modifyTargetLesion");
+    //     console.log(detail);
+    //     console.log(this.patient.id);
+    //     let response = await this.patientsDataProvider.modifyTargetLesion(this.patient.id, detail.id, detail);
+    //     const id = this.patient.id;
+    //     this.requestUpdate("patient", this.patient);
+    //     //this.patient = {...this.patient, id: id};
+    // }
 
-    async modifyNonTargetLesion({detail}) {
-        console.log("modifyNonTargetLesion");
-        console.log(detail);
-        let response = await this.patientsDataProvider.modifyNonTargetLesion(this.patient.id, detail.id, detail);
+    // async modifyNonTargetLesion({detail}) {
+    //     console.log("modifyNonTargetLesion");
+    //     console.log(detail);
+    //     let response = await this.patientsDataProvider.modifyNonTargetLesion(this.patient.id, detail.id, detail);
         
-        this.patient = [...this.patientsDataProvider.getPatientById(this.patient.id)];
-    }
+    //     this.patient = {...this.patientsDataProvider.getPatientById(this.patient.id)};
+    // }
 
     addNotification({detail}) {
         this._notifications = [...this._notifications, detail];
@@ -179,7 +181,7 @@ class App extends LitElement {
     render() {
         return html`
             <kor-page flat="true" scrollable="true" flex-direction="column">
-                <kor-app-bar slot="top" label="App" logo="http://pngimg.com/uploads/microsoft/microsoft_PNG13.png">
+                <kor-app-bar slot="top" label="App" logo="icons8-pill-48.png">
                     <kor-button slot="functions" label="Add Patient" @click=${() => this.openModalView()} ?disabled=${this.createView} style="display: flex; align-items: center;"></kor-button>
                 </kor-app-bar>
                 <app-notifications .notifications=${this._notifications} style="max-width: 1024px; width: 100%; margin: 0 auto;"></app-notifications>
