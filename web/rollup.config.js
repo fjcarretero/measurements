@@ -27,6 +27,7 @@ export default {
         { src: 'src/assets/**/*', dest: '../public/assets' },
         { src: 'src/assets/wait.html', dest: '../public' },
         { src: 'node_modules/**/fonts/*', dest: '../public/assets/fonts' },
+        { src: 'images/**/*', dest: '../public/images' },
       ],
     }),
   ],

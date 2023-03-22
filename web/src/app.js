@@ -181,7 +181,7 @@ class App extends LitElement {
     render() {
         return html`
             <kor-page flat="true" scrollable="true" flex-direction="column">
-                <kor-app-bar slot="top" label="App" logo="icons8-pill-48.png">
+                <kor-app-bar slot="top" label="App" logo="./images/icons8-pill-48.png">
                     <kor-button slot="functions" label="Add Patient" @click=${() => this.openModalView()} ?disabled=${this.createView} style="display: flex; align-items: center;"></kor-button>
                 </kor-app-bar>
                 <app-notifications .notifications=${this._notifications} style="max-width: 1024px; width: 100%; margin: 0 auto;"></app-notifications>
